@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0A1628">
+<title>BoomRx Formulary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0A1628;
+  --navy-light: #1E3058;
+  --orange: #F26522;
+  --bg: #F2F5F9;
+  --surface: #FFFFFF;
+  --border: #E0E7F0;
+  --border-mid: #C8D5E5;
+  --text-primary: #0A1628;
+  --text-secondary: #3D5270;
+  --text-muted: #7A90AA;
+  --accent-blue-light: #EBF0FD;
+  --pill-bg: #EAF0F8;
+  --tag-form-bg: #E8F5EC;
+  --tag-form-text: #1A6B35;
+  --tag-cat-bg: #FFF0E8;
+  --tag-cat-text: #C04A00;
+  --row-alt: #F8FAFD;
+  --shadow-sm: 0 1px 4px rgba(10,22,40,0.07);
+  --shadow-md: 0 4px 20px rgba(10,22,40,0.10);
+  --shadow-lg: 0 8px 40px rgba(10,22,40,0.18);
+  --radius: 8px;
+  --header-h: 56px;
+  --filter-h: 54px;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+/* ── HEADER ── */
+.header { background: var(--navy); padding: 0 16px; position: sticky; top: 0; z-index: 300; box-shadow: 0 2px 16px rgba(10,22,40,0.28); height: var(--header-h); display: flex; align-items: center; }
+.header-inner { width: 100%; max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
+.logo-wrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; text-decoration: none; }
+.logo-icon { width: 32px; height: 32px; background: var(--orange); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-icon svg { width: 18px; height: 18px; }
+.logo-text { font-size: 17px; font-weight: 700; color: #fff; letter-spacing: -0.3px; white-space: nowrap; }
+.logo-text span { color: var(--orange); }
+.logo-badge { background: rgba(242,101,34,0.18); color: var(--orange); font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; border: 1px solid rgba(242,101,34,0.3); white-space: nowrap; }
+.header-search { flex: 1; min-width: 0; position: relative; }
+.header-search input { width: 100%; padding: 8px 12px 8px 36px; border: 1.5px solid rgba(255,255,255,0.12); border-radius: var(--radius); background: rgba(255,255,255,0.09); color: #fff; font-family: inherit; font-size: 16px; /* 16px prevents iOS zoom */ outline: none; transition: all 0.15s; }
+.header-search input::placeholder { color: rgba(255,255,255,0.38); }
+.header-search input:focus { background: rgba(255,255,255,0.14); border-color: rgba(242,101,34,0.5); }
+.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: 0.4; pointer-events: none; }
+.header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.header-count { font-size: 11px; color: rgba(255,255,255,0.45); white-space: nowrap; }
+.signup-btn { background: var(--orange); color: #fff; border: none; border-radius: var(--radius); padding: 8px 14px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.15s; -webkit-tap-highlight-color: transparent; touch-action: manipulation; min-height: 40px; }
+.signup-btn:active { background: #D45518; }
+
+/* ── FILTER BAR ── */
+.filters-bar { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: var(--header-h); z-index: 200; box-shadow: var(--shadow-sm); }
+.filter-toggle-row { display: flex; align-items: center; gap: 8px; padding: 10px 16px; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+.filter-toggle-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); flex: 1; }
+.filter-active-count { background: var(--navy); color: #fff; font-size: 11px; font-weight: 700; border-radius: 20px; padding: 1px 8px; display: none; }
+.filter-active-count.show { display: inline-block; }
+.filter-chevron { color: var(--text-muted); font-size: 11px; transition: transform 0.2s; }
+.filter-chevron.open { transform: rotate(180deg); }
+.filters-drawer { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
+.filters-drawer.open { max-height: 500px; }
+.filters-drawer-inner { padding: 0 16px 14px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
+.filter-group { display: flex; flex-direction: column; gap: 7px; }
+.filter-label { font-size: 9px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-muted); padding-top: 10px; }
+.pill-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 20px; background: var(--pill-bg); color: var(--text-secondary); font-size: 13px; font-weight: 500; cursor: pointer; border: 1.5px solid transparent; transition: all 0.12s; white-space: nowrap; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; min-height: 36px; }
+.pill:active { opacity: 0.7; }
+.pill.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.pill.dimmed { opacity: 0.25; cursor: default; pointer-events: none; }
+.filter-actions { display: flex; justify-content: flex-end; }
+.clear-btn { padding: 7px 16px; border: 1.5px solid var(--border-mid); border-radius: 6px; background: none; color: var(--text-secondary); font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; min-height: 38px; }
+.clear-btn:active { border-color: var(--orange); color: var(--orange); }
+
+/* ── MAIN ── */
+.main { max-width: 1180px; margin: 0 auto; padding: 12px 12px 80px; }
+
+/* ── CARD LIST (mobile default) ── */
+.card-list { display: flex; flex-direction: column; gap: 8px; }
+.product-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); padding: 14px 16px; box-shadow: var(--shadow-sm); }
+.card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.card-name { font-size: 14px; font-weight: 600; color: var(--text-primary); line-height: 1.35; flex: 1; }
+.card-price { font-family: 'DM Mono', monospace; font-weight: 700; font-size: 15px; color: var(--orange); white-space: nowrap; flex-shrink: 0; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.card-strength { font-family: 'DM Mono', monospace; font-size: 11.5px; color: var(--text-muted); flex: 1; min-width: 0; }
+.tag { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.tag-form { background: var(--tag-form-bg); color: var(--tag-form-text); }
+.tag-cat { background: var(--tag-cat-bg); color: var(--tag-cat-text); }
+mark { background: #FFE57A; border-radius: 2px; padding: 0 1px; }
+
+/* ── TABLE (desktop only) ── */
+.table-wrap { display: none; background: var(--surface); border-radius: 10px; box-shadow: var(--shadow-md); overflow: hidden; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; }
+thead th { background: var(--navy); color: rgba(255,255,255,0.8); font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; padding: 12px 16px; text-align: left; cursor: pointer; user-select: none; white-space: nowrap; transition: background 0.1s; }
+thead th:hover { background: var(--navy-light); color: #fff; }
+thead th .sa { margin-left: 5px; opacity: 0.35; font-size: 10px; }
+thead th.sa-asc .sa::after { content: "\2191"; opacity: 1; }
+thead th.sa-desc .sa::after { content: "\2193"; opacity: 1; }
+thead th:not(.sa-asc):not(.sa-desc) .sa::after { content: "\2195"; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.08s; }
+tbody tr:nth-child(even) { background: var(--row-alt); }
+tbody tr:hover { background: var(--accent-blue-light); }
+tbody tr:last-child { border-bottom: none; }
+td { padding: 10px 16px; vertical-align: middle; font-size: 13px; }
+.td-name { font-weight: 500; color: var(--text-primary); }
+.td-strength { font-family: 'DM Mono', monospace; font-size: 11.5px; color: var(--text-secondary); }
+.td-price { font-family: 'DM Mono', monospace; font-weight: 600; font-size: 13px; color: var(--orange); white-space: nowrap; }
+.table-footer { text-align: center; font-size: 11px; color: var(--text-muted); padding: 12px 16px; border-top: 1px solid var(--border); background: var(--row-alt); }
+
+.empty-state { padding: 60px 24px; text-align: center; color: var(--text-muted); background: var(--surface); border-radius: 10px; border: 1px solid var(--border); }
+.empty-state h3 { font-size: 16px; font-weight: 500; margin-bottom: 6px; color: var(--text-secondary); }
+.result-footer { text-align: center; font-size: 11px; color: var(--text-muted); padding: 16px 0 0; }
+
+/* ── MODAL (slides up from bottom on mobile) ── */
+.modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(10,22,40,0.65); backdrop-filter: blur(3px); display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--surface); border-radius: 18px 18px 0 0; box-shadow: var(--shadow-lg); width: 100%; max-width: 100%; overflow: hidden; transform: translateY(100%); transition: transform 0.28s cubic-bezier(0.32,0.72,0,1); max-height: 94vh; display: flex; flex-direction: column; }
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-drag { width: 40px; height: 4px; background: var(--border-mid); border-radius: 2px; margin: 10px auto 0; flex-shrink: 0; }
+.modal-header { background: var(--navy); padding: 18px 20px 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-shrink: 0; }
+.modal-title { font-size: 17px; font-weight: 700; color: #fff; letter-spacing: -0.2px; }
+.modal-subtitle { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 3px; }
+.modal-close { background: rgba(255,255,255,0.12); border: none; color: #fff; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+.modal-close:active { background: rgba(255,255,255,0.22); }
+.modal-body { padding: 20px 20px 24px; overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; }
+
+/* FORM */
+.form-grid { display: flex; flex-direction: column; gap: 14px; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.req { color: var(--orange); margin-left: 2px; }
+.form-input, .form-select { padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 16px; /* 16px prevents iOS zoom on focus */ color: var(--text-primary); background: var(--surface); outline: none; transition: border-color 0.13s, box-shadow 0.13s; width: 100%; min-height: 48px; /* comfortable touch target */ }
+.form-input:focus, .form-select:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(242,101,34,0.11); }
+.form-input::placeholder { color: var(--text-muted); }
+.form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A90AA' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
+.form-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; color: var(--text-muted); padding-top: 4px; }
+.form-divider { border: none; border-top: 1px solid var(--border); margin: 2px 0; }
+.submit-btn { width: 100%; padding: 15px; background: var(--orange); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.15s; margin-top: 18px; box-shadow: 0 2px 10px rgba(242,101,34,0.3); min-height: 52px; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.submit-btn:active { background: #D45518; }
+.submit-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.form-note { font-size: 12px; color: var(--text-muted); margin-top: 10px; text-align: center; }
+.form-error { font-size: 12px; color: #C0392B; margin-top: 8px; text-align: center; display: none; background: #FEF2F2; padding: 8px 12px; border-radius: 6px; }
+
+/* SUCCESS */
+.modal-success { padding: 40px 20px 48px; text-align: center; display: none; }
+.success-icon { width: 64px; height: 64px; background: #E8F5EC; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 30px; }
+.modal-success h3 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
+.modal-success p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; }
+
+/* ── DESKTOP ── */
+@media (min-width: 680px) {
+  :root { --header-h: 60px; }
+  .header { padding: 0 24px; }
+  .logo-badge { display: inline-block; }
+  .header-count { display: block; }
+  .header-search input { font-size: 14px; }
+
+  /* Filters: always-open horizontal layout */
+  .filter-toggle-row { display: none; }
+  .filters-drawer { max-height: none !important; overflow: visible; }
+  .filters-drawer-inner { flex-direction: row; flex-wrap: wrap; align-items: flex-end; padding: 12px 24px; border-top: none; gap: 16px; }
+  .filter-label { padding-top: 0; }
+  .pill-row { flex-wrap: wrap; }
+  .pill { font-size: 12px; padding: 4px 12px; min-height: 30px; }
+  .filter-actions { margin-top: 0; align-self: flex-end; }
+  .clear-btn { min-height: 30px; font-size: 12px; padding: 4px 12px; }
+
+  /* Table replaces cards */
+  .card-list { display: none; }
+  .table-wrap { display: block; }
+  .result-footer { display: none; }
+
+  /* Modal: centered */
+  .modal-overlay { align-items: center; padding: 20px; }
+  .modal { border-radius: 14px; max-width: 520px; transform: translateY(20px); max-height: 92vh; }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-drag { display: none; }
+  .modal-header { padding: 22px 26px 20px; }
+  .modal-body { padding: 24px 26px 28px; }
+  .form-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .form-row-2 { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-input, .form-select { font-size: 13px; padding: 9px 12px; min-height: 40px; }
+  .submit-btn { padding: 13px; font-size: 14px; min-height: 46px; }
+
+  .main { padding: 20px 24px 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a class="logo-wrap" href="https://boomrx.com" target="_blank">
+      <div class="logo-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="10" r="8" fill="white" fill-opacity="0.2"/>
+          <path d="M7 10h6M10 7v6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="logo-text">Boom<span>Rx</span></span>
+      <span class="logo-badge">Formulary</span>
+    </a>
+    <div class="header-search">
+      <svg class="search-icon" width="15" height="15" viewBox="0 0 16 16" fill="none">
+        <circle cx="6.5" cy="6.5" r="5" stroke="white" stroke-width="1.5"/>
+        <path d="M10.5 10.5L14 14" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search products&#x2026;" autocomplete="off" spellcheck="false" inputmode="search">
+    </div>
+    <div class="header-right">
+      <span class="header-count" id="countDisplay"></span>
+      <button class="signup-btn" id="openSignup">Get Access</button>
+    </div>
+  </div>
+</header>
+
+<!-- FILTERS -->
+<div class="filters-bar">
+  <!-- Mobile toggle -->
+  <div class="filter-toggle-row" id="filterToggle">
+    <span class="filter-toggle-label">&#x25A3; Filter products</span>
+    <span class="filter-active-count" id="activeCount"></span>
+    <span class="filter-chevron" id="filterChevron">&#9660;</span>
+  </div>
+  <!-- Drawer (always open on desktop via CSS) -->
+  <div class="filters-drawer" id="filtersDrawer">
+    <div class="filters-drawer-inner">
+      <div class="filter-group">
+        <div class="filter-label">Category</div>
+        <div class="pill-row" id="categoryFilters"></div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Form</div>
+        <div class="pill-row" id="formFilters"></div>
+      </div>
+      <div class="filter-actions">
+        <button class="clear-btn" id="clearBtn">Clear all</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- Mobile: card list -->
+  <div class="card-list" id="cardList"></div>
+
+  <!-- Desktop: table -->
+  <div class="table-wrap" id="tableWrap">
+    <table>
+      <thead>
+        <tr>
+          <th data-col="n" class="sa-asc">Product Name <span class="sa"></span></th>
+          <th data-col="c">Category <span class="sa"></span></th>
+          <th data-col="f">Form <span class="sa"></span></th>
+          <th data-col="s">Strength / Size <span class="sa"></span></th>
+          <th data-col="p">Price <span class="sa"></span></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="table-footer" id="tableFooter"></div>
+  </div>
+
+  <div class="empty-state" id="emptyState" style="display:none">
+    <h3>No products match</h3>
+    <p>Try clearing some filters or adjusting your search.</p>
+  </div>
+
+  <div class="result-footer" id="resultFooter"></div>
+</main>
+
+<!-- SIGNUP MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-drag"></div>
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle">Get Portal Access</div>
+        <div class="modal-subtitle">One portal. Every compounding pharmacy. Best pricing guaranteed.</div>
+      </div>
+      <button class="modal-close" id="closeModal" aria-label="Close">&#x2715;</button>
+    </div>
+
+    <div class="modal-body" id="modalBody">
+      <div class="form-grid">
+
+        <div class="form-section-label">Contact Info</div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="f-fname">First Name<span class="req">*</span></label>
+            <input class="form-input" id="f-fname" type="text" placeholder="Jane" autocomplete="given-name" inputmode="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-lname">Last Name<span class="req">*</span></label>
+            <input class="form-input" id="f-lname" type="text" placeholder="Smith" autocomplete="family-name" inputmode="text">
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="f-email">Email<span class="req">*</span></label>
+            <input class="form-input" id="f-email" type="email" placeholder="jane@yourclinic.com" autocomplete="email" inputmode="email">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-phone">Phone<span class="req">*</span></label>
+            <input class="form-input" id="f-phone" type="tel" placeholder="(555) 000-0000" autocomplete="tel" inputmode="tel">
+          </div>
+        </div>
+
+        <hr class="form-divider">
+        <div class="form-section-label">Practice Info</div>
+
+        <div class="form-group">
+          <label class="form-label" for="f-company">Company Name<span class="req">*</span></label>
+          <input class="form-input" id="f-company" type="text" placeholder="Acme Medical Group" autocomplete="organization" inputmode="text">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-website">Company Website</label>
+          <input class="form-input" id="f-website" type="url" placeholder="www.yourpractice.com" inputmode="url">
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="f-type">Company Type<span class="req">*</span></label>
+            <select class="form-select" id="f-type">
+              <option value="">Select one</option>
+              <option>Medical Practice</option>
+              <option>Telehealth Provider</option>
+              <option>MedSpa</option>
+              <option>Fitness / Wellness Brand</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-volume">Monthly Volume<span class="req">*</span></label>
+            <select class="form-select" id="f-volume">
+              <option value="">Select range</option>
+              <option>Under 50</option>
+              <option>50 – 150</option>
+              <option>151 – 300</option>
+              <option>301 – 500</option>
+              <option>500+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-interest">Primary Product Interest<span class="req">*</span></label>
+          <select class="form-select" id="f-interest">
+            <option value="">Select one</option>
+            <option>Weight Management (GLP-1s)</option>
+            <option>Hormone Therapy (HRT / TRT)</option>
+            <option>Sexual Health</option>
+            <option>Hair &amp; Skin</option>
+            <option>Peptides &amp; Longevity</option>
+            <option>General Wellness</option>
+            <option>Multiple / All Categories</option>
+          </select>
+        </div>
+
+      </div>
+      <button class="submit-btn" id="submitBtn">Request Portal Access &#x2192;</button>
+      <div class="form-error" id="formError"></div>
+      <div class="form-note">A BoomRx rep will reach out within one business day.</div>
+    </div>
+
+    <div class="modal-success" id="modalSuccess">
+      <div class="success-icon">&#x2705;</div>
+      <h3>You're on the list!</h3>
+      <p>A BoomRx team member will be in touch within one business day to get your portal set up.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = [{"n": "Naltrexone", "c": "Addiction", "f": "Capsule", "s": "4mg", "p": "$0.90"}, {"n": "Naltrexone", "c": "Addiction", "f": "Capsule", "s": "3mg", "p": "$0.90"}, {"n": "Naltrexone", "c": "Addiction", "f": "Capsule", "s": "1.5mg", "p": "$0.90"}, {"n": "Naltrexone", "c": "Addiction", "f": "Capsule", "s": "6mg", "p": "$0.90"}, {"n": "Naltrexone", "c": "Addiction", "f": "Capsule", "s": "8mg", "p": "$0.90"}, {"n": "Naltrexone", "c": "Addiction", "f": "Capsule", "s": "5mg", "p": "$0.90"}, {"n": "Naltrexone", "c": "Addiction", "f": "Capsule", "s": "5 mg", "p": "$0.90"}, {"n": "Naltrexone", "c": "Addiction", "f": "Capsule", "s": "1.5 mg", "p": "$0.90"}, {"n": "Naltrexone", "c": "Addiction", "f": "Capsule", "s": "3 mg", "p": "$0.90"}, {"n": "Naltrexone", "c": "Addiction", "f": "Capsule", "s": "4 mg", "p": "$0.90"}, {"n": "Naltrexone (DYE-FREE)", "c": "Addiction", "f": "Capsule", "s": "6mg", "p": "$1.00"}, {"n": "Naltrexone (DYE-FREE)", "c": "Addiction", "f": "Capsule", "s": "3mg", "p": "$1.00"}, {"n": "Naltrexone (DYE-FREE)", "c": "Addiction", "f": "Capsule", "s": "1.5mg", "p": "$1.00"}, {"n": "Ascorbic Acid / Hydrocortisone / Hydroquinone / Kojic Acid / Tretinoin / Vitamin E", "c": "Anti-Aging", "f": "Cream", "s": "1/0.05/6/3/0.05%; 30mL Tube", "p": "$75.00"}, {"n": "Clindamycin / Erythromycin / Ketoconazole", "c": "Anti-Aging", "f": "Cream", "s": "2/4/2%; 30mL Tube", "p": "$90.00"}, {"n": "Clindamycin / Erythromycin / Ketoconazole / Tretinoin", "c": "Anti-Aging", "f": "Cream", "s": "2/4/2/0.015%; 30mL Tube", "p": "$100.00"}, {"n": "GHK-Cu", "c": "Anti-Aging", "f": "Injectable", "s": "10 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "GHK-Cu / Epithalon", "c": "Anti-Aging", "f": "Injectable", "s": "10 mg / 2 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "GHK-Cu / Epithalon / CJC-1295", "c": "Anti-Aging", "f": "Injectable", "s": "10 mg / 2 mg / 2 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "GHK-Cu / Hyaluronic Acid / Hydroquinone / Niacinamide", "c": "Anti-Aging", "f": "Cream", "s": "0.05/0.2/6/4%; 30mL Tube", "p": "$120.00"}, {"n": "GHK-Cu Cosmetic Cream", "c": "Anti-Aging", "f": "Cream", "s": "0.5%; 30 mL Pump", "p": "$100.00"}, {"n": "GHK-Cu Cosmetic Cream", "c": "Anti-Aging", "f": "Cream", "s": "0.5%; 60 mL Pump", "p": "$200.00"}, {"n": "Hydroquinone", "c": "Anti-Aging", "f": "Cream", "s": "0.1%; 30mL Tube", "p": "$60.00"}, {"n": "Hydroquinone / Kojic Acid / Hydrocortisone", "c": "Anti-Aging", "f": "Cream", "s": "8/4/0.5%; 30mL Tube", "p": "$60.00"}, {"n": "Hydroquinone / Tretinoin / Hydrocortisone", "c": "Anti-Aging", "f": "Cream", "s": "6/0.025/2.5%; 30mL Tube", "p": "$60.00"}, {"n": "Lipo - Methyl B12 (Methionine / Choline Chrolide / L-Carntitine / Methylcobalamin)", "c": "Anti-Aging", "f": "Injectable", "s": "15 mg / 50 mg / 25 mg / 0.6 mg/mL; 10 mL Vial", "p": "$75.00"}, {"n": "Lipo - Methyl B12 (Methionine / Choline Chrolide / L-Carntitine / Methylcobalamin)", "c": "Anti-Aging", "f": "Injectable", "s": "15 mg / 50 mg / 25 mg / 0.6 mg/mL; 5 mL Vial", "p": "$35.00"}, {"n": "Methylcobalamin (B12)", "c": "Anti-Aging", "f": "Injectable", "s": "1 mg/mL; 10 mL Vial", "p": "$20.00 \u2013 $23.00"}, {"n": "Methylcobalamin (B12)", "c": "Anti-Aging", "f": "Injectable", "s": "2 mg/mL; 10 mL Vial", "p": "$30.00"}, {"n": "Tretinoin", "c": "Anti-Aging", "f": "Cream", "s": "0.015%; 30mL Tube", "p": "$40.00"}, {"n": "Tretinoin", "c": "Anti-Aging", "f": "Cream", "s": "0.024%; 30 mL Tube", "p": "$40.00"}, {"n": "Tretinoin", "c": "Anti-Aging", "f": "Cream", "s": "0.15%; 30mL Tube", "p": "$60.00"}, {"n": "Tretinoin / Niacinamide / Hyaluronic Acid", "c": "Anti-Aging", "f": "Cream", "s": "0.045/4/0.5%; 30mL Tube", "p": "$60.00"}, {"n": "Tretinoin / Niacinamide / Hyaluronic Acid", "c": "Anti-Aging", "f": "Cream", "s": "0.025/4/0.5%; 30mL Tube", "p": "$60.00"}, {"n": "Topiramate - Commercial", "c": "Anti-Convulsant", "f": "Tablet", "s": "25 mg", "p": "$1.00"}, {"n": "Topiramate - Commercial", "c": "Anti-Convulsant", "f": "Tablet", "s": "50 mg", "p": "$1.00"}, {"n": "Clarity Cream (Azelaic Acid / Niacinamide / Clindamycin / Tretinoin)", "c": "Cosmetic Cream", "f": "Cream", "s": "10 / 4 / 2 / 0.1%; 30 g Tube", "p": "$100.00"}, {"n": "ClearTone (Azelaic Acid / Hydroquinone / Kojic Acid / Tranexamic Acid / Niacinamide)", "c": "Cosmetic Cream", "f": "Cream", "s": "10 / 4 / 2 / 5 / 4%; 30 g Tube", "p": "$100.00"}, {"n": "Eos Cream (Azelaic Acid / Niacinamide / Hyaluronic Acid / Tretinoin)", "c": "Cosmetic Cream", "f": "Cream", "s": "10 / 5 / 0.25 / 0.05%; 30 g Tube", "p": "$100.00"}, {"n": "HydroTone Gel (Niacinamide / Dexpanthenol / Vitamin E / Hyaluronic Acid)", "c": "Cosmetic Cream", "f": "Cream", "s": "4 / 2 / 1 / 0.2%; 30 g Tube", "p": "$100.00"}, {"n": "LuminEye (GHK-Cu / Caffeine / Tranexamic Acid / Hyaluronic Acid )", "c": "Cosmetic Cream", "f": "Cream", "s": "0.5 / 1 / 3 / 0.2%; 10 g Tube", "p": "$100.00"}, {"n": "Refine PM (GHK-Cu / Tretinoin / Dexpanthenol / Vitamin E / Hyaluronic Acid )", "c": "Cosmetic Cream", "f": "Cream", "s": "0.5 / 0.05 / 0.3 / 2 / 1%; 30 g Tube", "p": "$100.00"}, {"n": "Vital C5 (Vitamin C / Niacinamide / Resveratrol / Vitamin E / Hyaluronic Acid)", "c": "Cosmetic Cream", "f": "Cream", "s": "5 / 5 / 1 / 1 / 0.3%; 30 g Tube", "p": "$100.00"}, {"n": "Biotin/Minoxidil", "c": "Hair Loss", "f": "Capsule", "s": "5mg/1.25mg", "p": "$2.00"}, {"n": "Biotin/Minoxidil", "c": "Hair Loss", "f": "Capsule", "s": "5mg/3mg", "p": "$2.00"}, {"n": "Caffeine / Finasteride / Latanoprost / Minoxidil / Tretinoin", "c": "Hair Loss", "f": "Solution", "s": "0.1/0.1/0.01/5/0.01%; 30mL Tube", "p": "$120.00"}, {"n": "Dutasteride / Latanoprost / Minoxidil / Tretinoin", "c": "Hair Loss", "f": "Solution", "s": "0.005%/0.5/6/0.025%; 30mL Tube", "p": "$120.00"}, {"n": "Dutasteride SR", "c": "Hair Loss", "f": "Capsule", "s": "0.25mg", "p": "$2.10"}, {"n": "Dutasteride SR", "c": "Hair Loss", "f": "Capsule", "s": "1.0mg", "p": "$2.10"}, {"n": "Dutasteride SR", "c": "Hair Loss", "f": "Capsule", "s": "1.5mg", "p": "$2.10"}, {"n": "Finasteride", "c": "Hair Loss", "f": "Capsule", "s": "0.50 mg", "p": "$1.50"}, {"n": "Finasteride / Minoxidil", "c": "Hair Loss", "f": "Foam", "s": "0.25 mg / 5 mg; 30 mL Pump", "p": "$30.00"}, {"n": "Finasteride / Minoxidil", "c": "Hair Loss", "f": "Solution", "s": "0.25 / 12%; 30 mL Tube", "p": "$30.00"}, {"n": "Finasteride / Minoxidil", "c": "Hair Loss", "f": "Foam", "s": "0.25 mg / 12 mg; 30 mL Pump", "p": "$30.00"}, {"n": "Finasteride / Minoxidil / Tretinoin", "c": "Hair Loss", "f": "Foam", "s": "0.25 mg / 5.0 mg / 0.03%; 60 mL Pump", "p": "$60.00"}, {"n": "Finasteride-commercial", "c": "Hair Loss", "f": "Tablet", "s": "1.0mg", "p": "$3.00"}, {"n": "Finasteride/Minoxidil", "c": "Hair Loss", "f": "Capsule", "s": "1mg/2.5mg", "p": "$1.40"}, {"n": "Minoxidil - Commercial", "c": "Hair Loss", "f": "Tablet", "s": "2.5 mg", "p": "$0.60"}, {"n": "Minoxidil - Commercial", "c": "Hair Loss", "f": "Tablet", "s": "10 mg", "p": "$1.00"}, {"n": "Omnitrope", "c": "HGH", "f": "Injectable", "s": "5.8 mg; 1 mL Vial", "p": "$425.00"}, {"n": "Sermorelin", "c": "HGH", "f": "Troche", "s": "500 mcg - Berry Explosion", "p": "$1.50"}, {"n": "Sermorelin", "c": "HGH", "f": "Troche", "s": "1,000 mcg - Berry Explosion", "p": "$2.50"}, {"n": "Sermorelin", "c": "HGH", "f": "Injectable", "s": "15 mg (3 mg/mL); 5 mL Vial", "p": "$90.00"}, {"n": "Sermorelin", "c": "HGH", "f": "Injectable", "s": "9 mg (1 mg/mL); 9 mL Vial", "p": "$90.00"}, {"n": "Sermorelin", "c": "HGH", "f": "Injectable", "s": "6 mg (1.5 mg/mL); 4 mL Vial", "p": "$60.00"}, {"n": "Sermorelin / Ipamorelin", "c": "HGH", "f": "Injectable", "s": "3 mg / 2 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "Zomacton", "c": "HGH", "f": "Injectable", "s": "5 mg", "p": "$410.00"}, {"n": "7-Keto DHEA SR", "c": "HRT", "f": "Capsule", "s": "10 mg", "p": "$1.60"}, {"n": "Anastrozole - Commercial", "c": "HRT", "f": "Tablet", "s": "1 mg", "p": "$1.00"}, {"n": "Anastrozole IR", "c": "HRT", "f": "Capsule", "s": "0.25 mg", "p": "$0.90"}, {"n": "Anastrozole IR", "c": "HRT", "f": "Capsule", "s": "0.5 mg", "p": "$0.90"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "0.25mg", "p": "$1.00"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "0.125mg", "p": "$0.80"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "0.1mg", "p": "$0.80"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "0.4mg", "p": "$1.00"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "0.5mg", "p": "$1.00"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "0.75mg", "p": "$1.00"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "1.1mg", "p": "$1.20"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "1 mg", "p": "$0.90"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "0.125 mg", "p": "$0.80"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "1.1 mg", "p": "$1.20"}, {"n": "Anastrozole SR", "c": "HRT", "f": "Capsule", "s": "0.5 mg", "p": "$1.00"}, {"n": "Armour Thyroid - Commercial", "c": "HRT", "f": "Tablet", "s": "30 mg", "p": "$2.50"}, {"n": "Armour Thyroid - Commercial", "c": "HRT", "f": "Tablet", "s": "60 mg", "p": "$2.90"}, {"n": "BIEST (20:80)", "c": "HRT", "f": "ODT", "s": "0.05 MG", "p": "$1.20"}, {"n": "BIEST (20:80)", "c": "HRT", "f": "ODT", "s": "0.1 MG", "p": "$1.20"}, {"n": "BIEST (20:80) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "0.4 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (20:80) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "0.625 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (20:80) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "0.2 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (20:80) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "2 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (20:80) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "2.5 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (20:80) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "1 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (20:80) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "1.25 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (20:80) (VERSABASE) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "3 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "Biest (20:80) / Progesterone", "c": "HRT", "f": "Capsule", "s": "1.25 mg / 100 mg", "p": "$1.20"}, {"n": "BIEST (20:80) / Progesterone (Topi-Click)", "c": "HRT", "f": "Cream", "s": "1.25 mg/mL / 100 mg/mL; 30 mL Tube", "p": "$30.00"}, {"n": "Biest (20:80) / Progesterone IR", "c": "HRT", "f": "Capsule", "s": "1.5 mg / 100 mg", "p": "$1.20"}, {"n": "Biest (20:80) / Progesterone SR", "c": "HRT", "f": "Capsule", "s": "5 mg / 150 mg", "p": "$1.20"}, {"n": "Biest (20:80) / Progesterone SR", "c": "HRT", "f": "Capsule", "s": "5 mg / 100 mg", "p": "$1.20"}, {"n": "Biest (20:80) / Progesterone SR", "c": "HRT", "f": "Capsule", "s": "1.5 mg / 100 mg", "p": "$1.20"}, {"n": "Biest (20:80) / Progesterone SR", "c": "HRT", "f": "Capsule", "s": "1.25 mg / 150 mg", "p": "$1.20"}, {"n": "Biest (20:80) / Progesterone SR", "c": "HRT", "f": "Capsule", "s": "0.625 mg / 150 mg", "p": "$1.20"}, {"n": "Biest (20:80) / Progesterone SR", "c": "HRT", "f": "Capsule", "s": "1.25 mg / 200 mg", "p": "$1.20"}, {"n": "BIEST (20:80) IR", "c": "HRT", "f": "Capsule", "s": "1.5 MG", "p": "$1.20"}, {"n": "BIEST (50:50)", "c": "HRT", "f": "RDT", "s": "0.5 MG", "p": "$1.20"}, {"n": "BIEST (50:50)", "c": "HRT", "f": "RDT", "s": "0.05 MG", "p": "$1.20"}, {"n": "BIEST (50:50)", "c": "HRT", "f": "RDT", "s": "0.1 MG", "p": "$1.20"}, {"n": "BIEST (50:50)", "c": "HRT", "f": "RDT", "s": "0.2 MG", "p": "$1.20"}, {"n": "BIEST (50:50)", "c": "HRT", "f": "RDT", "s": "0.4 MG", "p": "$1.20"}, {"n": "BIEST (50:50)", "c": "HRT", "f": "RDT", "s": "1 MG", "p": "$1.20"}, {"n": "BIEST (50:50) (Topi-Click)", "c": "HRT", "f": "Cream", "s": "8 mg/mL; 30 mL Tube", "p": "$30.00"}, {"n": "BIEST (50:50) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "3 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (50:50) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "1.5 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (50:50) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "1 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (50:50) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "2.75 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (50:50) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "2 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (50:50) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "0.75 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "BIEST (50:50) (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "1.25 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "Biest (50:50) / Progesterone IR", "c": "HRT", "f": "Capsule", "s": "2.5 mg / 275 mg", "p": "$1.20"}, {"n": "Biest (50:50) / Progesterone SR", "c": "HRT", "f": "Capsule", "s": "2.5 mg / 200 mg", "p": "$1.20"}, {"n": "BIEST (50:50) / Progesterone SR", "c": "HRT", "f": "Capsule", "s": "1.8 mg / 200 mg", "p": "$1.20"}, {"n": "BIEST (50:50) IR", "c": "HRT", "f": "Capsule", "s": "2 MG", "p": "$1.20"}, {"n": "BIEST (50:50) IR", "c": "HRT", "f": "Capsule", "s": "1 MG", "p": "$1.00"}, {"n": "BIEST 50/50/Progesterone SR", "c": "HRT", "f": "Capsule", "s": "1.8mg/200mg", "p": "$1.20"}, {"n": "Cabergoline (commercial)", "c": "HRT", "f": "Tablet", "s": "0.5mg (8 count bottle)", "p": "$300.00"}, {"n": "Chorionic Gonadotropin (hCG) - Commercial", "c": "HRT", "f": "Injectable", "s": "10,000 IU", "p": "$210.00"}, {"n": "Clomiphene Citrate", "c": "HRT", "f": "Capsule", "s": "25 mg", "p": "$1.00 \u2013 $1.25"}, {"n": "Clomiphene Citrate", "c": "HRT", "f": "Capsule", "s": "30 mg", "p": "$1.00"}, {"n": "Clomiphene Citrate", "c": "HRT", "f": "Capsule", "s": "50 mg", "p": "$1.00"}, {"n": "Clomiphene CITRATE", "c": "HRT", "f": "Capsule", "s": "51mg", "p": "$1.50"}, {"n": "Clomiphene CITRATE", "c": "HRT", "f": "Capsule", "s": "25mg", "p": "$1.25"}, {"n": "Clomiphene Citrate - Commercial", "c": "HRT", "f": "Tablet", "s": "50 mg", "p": "$1.50"}, {"n": "Clomiphene Citrate - Commercial", "c": "HRT", "f": "Tablet", "s": "100 mg", "p": "$1.40"}, {"n": "Clomiphene Citrate / Anastrozole", "c": "HRT", "f": "Capsule", "s": "40 mg / 100 mg", "p": "$1.25"}, {"n": "DHEA / Pregnenolone", "c": "HRT", "f": "Capsule", "s": "25 mg / 100 mg", "p": "$1.10"}, {"n": "DHEA IR", "c": "HRT", "f": "Capsule", "s": "20 mg", "p": "$1.10"}, {"n": "DHEA IR", "c": "HRT", "f": "Capsule", "s": "50 mg", "p": "$1.10"}, {"n": "DHEA IR", "c": "HRT", "f": "Capsule", "s": "5 mg", "p": "$1.10"}, {"n": "DHEA SR", "c": "HRT", "f": "Capsule", "s": "5mg", "p": "$1.10"}, {"n": "DHEA SR", "c": "HRT", "f": "Capsule", "s": "10mg", "p": "$1.10"}, {"n": "DHEA SR", "c": "HRT", "f": "Capsule", "s": "25mg", "p": "$1.10"}, {"n": "DHEA SR", "c": "HRT", "f": "Capsule", "s": "50mg", "p": "$1.10"}, {"n": "DHEA SR", "c": "HRT", "f": "Capsule", "s": "10 mg", "p": "$1.10"}, {"n": "DHEA SR", "c": "HRT", "f": "Capsule", "s": "25 mg", "p": "$1.10"}, {"n": "DHEA/Pregnenolone", "c": "HRT", "f": "Capsule", "s": "25mg/25mg", "p": "$1.10"}, {"n": "DHEA/Pregnenolone", "c": "HRT", "f": "Capsule", "s": "10mg/50mg", "p": "$1.10"}, {"n": "Enclomiphene Citrate", "c": "HRT", "f": "Capsule", "s": "25 mg", "p": "$1.50"}, {"n": "Enclomiphene Citrate", "c": "HRT", "f": "Capsule", "s": "12.5 mg", "p": "$1.20"}, {"n": "Enclomiphene Citrate", "c": "HRT", "f": "Capsule", "s": "51 mg", "p": "$2.00"}, {"n": "Enclomiphene CITRATE", "c": "HRT", "f": "Capsule", "s": "12.5mg", "p": "$1.20"}, {"n": "Enclomiphene CITRATE", "c": "HRT", "f": "Capsule", "s": "51mg", "p": "$2.00"}, {"n": "Enclomiphene CITRATE", "c": "HRT", "f": "Capsule", "s": "25mg", "p": "$1.50"}, {"n": "Enclomiphene CITRATE", "c": "HRT", "f": "Capsule", "s": "75mg", "p": "$3.00"}, {"n": "Enclomiphene Citrate (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "12.5 mg", "p": "$1.20"}, {"n": "Enclomiphene CITRATE (DYE-FREE)", "c": "HRT", "f": "Capsule", "s": "12.5mg", "p": "$1.20"}, {"n": "Estradiol", "c": "HRT", "f": "Vag. Insert", "s": "10mcg (8 inserts)", "p": "$30.00"}, {"n": "ESTRADIOL", "c": "HRT", "f": "Vag. Cream", "s": "0.1 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "ESTRADIOL", "c": "HRT", "f": "Vag. Cream", "s": "0.015 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "ESTRADIOL", "c": "HRT", "f": "Vag. Cream", "s": "0.5 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "Estradiol - Commercial", "c": "HRT", "f": "Tablet", "s": "1 mg", "p": "$1.00"}, {"n": "Estradiol - Commercial", "c": "HRT", "f": "Tablet", "s": "0.5 mg", "p": "$1.00"}, {"n": "Estradiol - Commercial", "c": "HRT", "f": "Tablet", "s": "2 mg", "p": "$1.00"}, {"n": "Estradiol (4 Pack) - Commercial", "c": "HRT", "f": "Patch", "s": "0.025 mg / 24 hr", "p": "$150.00"}, {"n": "Estradiol (4 Pack) - Commercial", "c": "HRT", "f": "Patch", "s": "0.075 mg / 24 hr", "p": "$150.00"}, {"n": "Estradiol (4 Pack) - Commercial", "c": "HRT", "f": "Patch", "s": "0.050 mg / 24 hr", "p": "$150.00"}, {"n": "Estradiol (8 Pack) - Commercial", "c": "HRT", "f": "Patch", "s": "0.075 mg / 24 hr", "p": "$180.00"}, {"n": "Estradiol (8 Pack) - Commercial", "c": "HRT", "f": "Patch", "s": "0.050 mg / 24 hr", "p": "$180.00"}, {"n": "Estradiol (8 Pack) - Commercial", "c": "HRT", "f": "Patch", "s": "0.025 mg / 24 hr", "p": "$180.00"}, {"n": "Estradiol (Topi-Click)", "c": "HRT", "f": "Cream", "s": "10 mg/mL; 30 mL Tube", "p": "$30.00"}, {"n": "Estradiol (Topi-Click)", "c": "HRT", "f": "Cream", "s": "4 mg/mL; 30 mL Tube", "p": "$30.00"}, {"n": "Estradiol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "1.5 MG/ML; 30ml Tube", "p": "$30.00"}, {"n": "Estradiol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "1 MG/ML; 30ml Tube", "p": "$30.00"}, {"n": "Estradiol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "2.5 MG/ML; 30ml Tube", "p": "$30.00"}, {"n": "Estradiol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "2 MG/ML; 30ml Tube", "p": "$30.00"}, {"n": "Estradiol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "3 MG/ML; 30ml Tube", "p": "$30.00"}, {"n": "ESTRADIOL (VERSABASE)", "c": "HRT", "f": "Vag. Cream", "s": "2 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "ESTRADIOL (VERSABASE)", "c": "HRT", "f": "Vag. Cream", "s": "0.15 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "ESTRADIOL (VERSABASE)", "c": "HRT", "f": "Vag. Cream", "s": "0.2 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "ESTRADIOL (VERSABASE)", "c": "HRT", "f": "Vag. Cream", "s": "1 MG/ML; 30mL Tube", "p": "$30.00"}, {"n": "Estradiol Cypionate - MCT", "c": "HRT", "f": "Injectable", "s": "10 mg/mL; 3 mL Vial", "p": "$35.00"}, {"n": "Estradiol IR", "c": "HRT", "f": "Capsule", "s": "1 mg", "p": "$1.00"}, {"n": "Estradiol IR", "c": "HRT", "f": "Capsule", "s": "2.5 MG", "p": "$1.00"}, {"n": "Estradiol IR", "c": "HRT", "f": "Capsule", "s": "2 MG", "p": "$1.00"}, {"n": "Estradiol IR", "c": "HRT", "f": "Capsule", "s": "4 MG", "p": "$1.20"}, {"n": "Estradiol IR", "c": "HRT", "f": "Capsule", "s": "1.5mg", "p": "$1.00"}, {"n": "Estradiol SL", "c": "HRT", "f": "Troche", "s": "4.5 mg - Creme de Menthe", "p": "$1.20"}, {"n": "Estradiol SR", "c": "HRT", "f": "Capsule", "s": "1 MG", "p": "$1.20"}, {"n": "ESTRADIOL/PROGESTERONE (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "2mg/200mg/mL; 30mL Tube", "p": "$40.00"}, {"n": "ESTRADIOL/PROGESTERONE (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "1mg/100mg/mL; 30mL Tube", "p": "$40.00"}, {"n": "Estriol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "25mg/mL; 30mL Tube", "p": "$40.00"}, {"n": "Estriol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "0.5mg/mL; 30mL Tube", "p": "$30.00"}, {"n": "Estriol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "0.01mg/mL; 30mL Tube", "p": "$30.00"}, {"n": "Estriol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "4mg/mL; 30mL Tube", "p": "$30.00"}, {"n": "Estriol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "1mg/mL; 30mL Tube", "p": "$30.00"}, {"n": "Estriol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "3mg/mL; 30mL Tube", "p": "$30.00"}, {"n": "Estriol (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "2mg/mL; 30mL Tube", "p": "$30.00"}, {"n": "Exemestane - Commercial", "c": "HRT", "f": "Tablet", "s": "25 mg", "p": "$2.20"}, {"n": "Gonadorelin 10mg/5mL", "c": "HRT", "f": "Injectable", "s": "2mg/5ml", "p": "$80.00"}, {"n": "Gonadorelin 2mg", "c": "HRT", "f": "Injectable", "s": "2mg/1ml", "p": "$26.00"}, {"n": "Gonadorelin 6mg/6mL", "c": "HRT", "f": "Injectable", "s": "1mg/1ml", "p": "$60.00"}, {"n": "KyzaTrex", "c": "HRT", "f": "Capsule", "s": "200mg (1 bottle, 120 capsules)", "p": "$175.00"}, {"n": "Liothyronine (T3) IR", "c": "HRT", "f": "Capsule", "s": "6.5 MCG", "p": "$1.20"}, {"n": "Liothyronine (T3) IR", "c": "HRT", "f": "Capsule", "s": "12 MCG", "p": "$1.20"}, {"n": "Liothyronine (T3) SR", "c": "HRT", "f": "Capsule", "s": "6.5mcg", "p": "$1.20"}, {"n": "Liothyronine (T3) SR", "c": "HRT", "f": "Capsule", "s": "12mcg", "p": "$1.20"}, {"n": "Liothyronine (T3) SR", "c": "HRT", "f": "Capsule", "s": "22mcg", "p": "$1.20"}, {"n": "Liothyronine (T3) SR (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "12mcg", "p": "$1.00"}, {"n": "Liothyronine (T3) SR (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "22.5mcg", "p": "$1.00"}, {"n": "Nandrolone", "c": "HRT", "f": "Cream", "s": "200 mg/mL; 30 mL Tube", "p": "$70.00"}, {"n": "Nandrolone Decanoate", "c": "HRT", "f": "Injectable", "s": "200 mg/mL; 5 mL Vial", "p": "$75.00"}, {"n": "Nandrolone Decanoate", "c": "HRT", "f": "Injectable", "s": "300 mg/mL; 5 mL Vial", "p": "$50.00"}, {"n": "Nandrolone Decanoate", "c": "HRT", "f": "Injectable", "s": "100 mg/mL; 5 mL Vial", "p": "$50.00"}, {"n": "Oxandrolone", "c": "HRT", "f": "Capsule", "s": "5mg", "p": "$3.00"}, {"n": "Oxandrolone", "c": "HRT", "f": "Capsule", "s": "50mg", "p": "$6.20"}, {"n": "Oxandrolone", "c": "HRT", "f": "Capsule", "s": "25mg", "p": "$4.50"}, {"n": "Oxandrolone", "c": "HRT", "f": "Capsule", "s": "10mg", "p": "$4.00"}, {"n": "Oxandrolone SL", "c": "HRT", "f": "Troche", "s": "25 mg - Berry Explosion", "p": "$4.50"}, {"n": "Oxandrolone SL", "c": "HRT", "f": "Troche", "s": "50 mg - Unflavored", "p": "$6.20"}, {"n": "Oxandrolone SL", "c": "HRT", "f": "Troche", "s": "50 mg - Berry Explosion", "p": "$6.20"}, {"n": "Pregnenolone IR", "c": "HRT", "f": "Capsule", "s": "25mg", "p": "$1.00"}, {"n": "Progesterone", "c": "HRT", "f": "RDT", "s": "150 mg - Raspberry", "p": "$1.20"}, {"n": "Progesterone (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "100mg/mL; 30mL Tube", "p": "$30.00"}, {"n": "Progesterone (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "50mg/mL; 30mL Tube", "p": "$30.00"}, {"n": "Progesterone (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "200mg/mL; 30mL Tube", "p": "$30.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "200mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "25mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "300mg", "p": "$1.20"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "50mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "75 mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "175mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "150mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "125mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "100mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "180mg", "p": "$1.20"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "250mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "125 mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "100 mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "200 mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "25 mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "50 mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "150 mg", "p": "$1.00"}, {"n": "Progesterone IR", "c": "HRT", "f": "Capsule", "s": "175 mg", "p": "$1.00"}, {"n": "Progesterone IR (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "175mg", "p": "$1.00"}, {"n": "Progesterone IR (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "50mg", "p": "$1.00"}, {"n": "Progesterone IR (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "250mg", "p": "$1.00"}, {"n": "Progesterone IR (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "100mg", "p": "$1.00"}, {"n": "Progesterone IR (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "150mg", "p": "$1.00"}, {"n": "Progesterone IR (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "200mg", "p": "$1.00"}, {"n": "Progesterone SL", "c": "HRT", "f": "Troche", "s": "200 mg - Stevia", "p": "$1.20"}, {"n": "Progesterone SR", "c": "HRT", "f": "Capsule", "s": "300mg", "p": "$1.20"}, {"n": "Progesterone SR", "c": "HRT", "f": "Capsule", "s": "150mg", "p": "$1.00"}, {"n": "Progesterone SR", "c": "HRT", "f": "Capsule", "s": "100mg", "p": "$1.00"}, {"n": "Progesterone SR", "c": "HRT", "f": "Capsule", "s": "200 mg", "p": "$1.00"}, {"n": "Progesterone SR", "c": "HRT", "f": "Capsule", "s": "75 mg", "p": "$1.00"}, {"n": "Progesterone SR", "c": "HRT", "f": "Capsule", "s": "250 mg", "p": "$1.00"}, {"n": "Progesterone SR (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "150mg", "p": "$1.00"}, {"n": "Progesterone SR (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "200 mg", "p": "$1.00"}, {"n": "Stanozolol (Dye-Free)", "c": "HRT", "f": "Capsule", "s": "50 mg", "p": "$4.00"}, {"n": "Stanozolol (DYE-FREE)", "c": "HRT", "f": "Capsule", "s": "25mg", "p": "$4.00"}, {"n": "Stanozolol SL", "c": "HRT", "f": "Troche", "s": "5 mg - Berry Explosion", "p": "$2.00"}, {"n": "Stanozolol SL", "c": "HRT", "f": "Troche", "s": "50 mg - Berry Explosion", "p": "$6.00"}, {"n": "Stanozolol SL", "c": "HRT", "f": "Troche", "s": "25 mg - Berry Explosion", "p": "$4.00"}, {"n": "Stanozolol SL", "c": "HRT", "f": "Troche", "s": "10 mg - Berry Explosion", "p": "$2.00"}, {"n": "Tamoxifen - Commercial", "c": "HRT", "f": "Tablet", "s": "10 mg", "p": "$1.50"}, {"n": "Tamoxifen - Commercial", "c": "HRT", "f": "Tablet", "s": "20 mg", "p": "$2.00"}, {"n": "Testosterone - Atrevis Hydrogel (Topi-Click)", "c": "HRT", "f": "Cream", "s": "100 mg/mL; 30 mL Tube", "p": "$30.00"}, {"n": "Testosterone (Topi-Click)", "c": "HRT", "f": "Cream", "s": "2 mg/mL; 30 mL Tube", "p": "$30.00"}, {"n": "Testosterone (Topi-Click)", "c": "HRT", "f": "Cream", "s": "4 mg/mL; 30 mL Tube", "p": "$30.00"}, {"n": "Testosterone (Topi-Click)", "c": "HRT", "f": "Cream", "s": "1 mg/mL; 30 mL Tube", "p": "$30.00"}, {"n": "Testosterone (Topi-Click)", "c": "HRT", "f": "Cream", "s": "200 mg; 30 mL Tube", "p": "$30.00"}, {"n": "Testosterone (Topi-Click)", "c": "HRT", "f": "Cream", "s": "100 mg; 30 mL Tube", "p": "$30.00"}, {"n": "Testosterone (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "50mg/ml; 30mL Tube", "p": "$30.00"}, {"n": "Testosterone (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "40mg/ml; 30mL Tube", "p": "$30.00"}, {"n": "Testosterone (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "30mg/ml; 30mL Tube", "p": "$30.00"}, {"n": "Testosterone (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "20mg/ml; 30mL Tube", "p": "$30.00"}, {"n": "Testosterone (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "200mg/ml; 30mL Tube", "p": "$30.00"}, {"n": "Testosterone (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "120mg/ml; 30mL Tube", "p": "$30.00"}, {"n": "Testosterone (TOPI-CLICK)", "c": "HRT", "f": "Cream", "s": "10mg/ml; 30mL Tube", "p": "$30.00"}, {"n": "Testosterone Cypionate - Commercial", "c": "HRT", "f": "Injectable", "s": "100 mg/mL; 10 mL Vial", "p": "$80.00"}, {"n": "Testosterone Cypionate - Commercial", "c": "HRT", "f": "Injectable", "s": "200 mg/mL; 10 mL Vial", "p": "$70.00"}, {"n": "Testosterone Cypionate - GSO", "c": "HRT", "f": "Injectable", "s": "25 mg/mL; 5 mL Vial", "p": "$17.50"}, {"n": "Testosterone Cypionate - GSO", "c": "HRT", "f": "Injectable", "s": "200 mg/mL; 5 mL Vial", "p": "$17.50"}, {"n": "Testosterone Cypionate - MCT", "c": "HRT", "f": "Injectable", "s": "200 mg/mL; 5 mL Vial", "p": "$17.50"}, {"n": "Testosterone Cypionate - MCT", "c": "HRT", "f": "Injectable", "s": "25 mg/mL; 5 mL Vial", "p": "$17.50"}, {"n": "Testosterone Cypionate - MCT", "c": "HRT", "f": "Injectable", "s": "50 mg/mL; 4 mL Vial", "p": "$17.50"}, {"n": "Testosterone Cypionate / Enanthate / Propionate", "c": "HRT", "f": "Injectable", "s": "100 / 100 / 50 mg/mL; 5 mL Vial", "p": "$20.00"}, {"n": "Testosterone Enanthate - GSO", "c": "HRT", "f": "Injectable", "s": "200 mg/mL; 5 mL Vial", "p": "$17.50"}, {"n": "Testosterone Enanthate - MCT", "c": "HRT", "f": "Injectable", "s": "200 mg/mL; 5 mL Vial", "p": "$17.50"}, {"n": "Testosterone SR", "c": "HRT", "f": "Troche", "s": "100 mg - Berry Explosion", "p": "$1.20"}, {"n": "Testosterone SR", "c": "HRT", "f": "Troche", "s": "10 mg - Berry Explosion", "p": "$1.20"}, {"n": "Testosterone SR", "c": "HRT", "f": "Troche", "s": "200 mg - Berry Explosion", "p": "$1.20"}, {"n": "Testosterone SR", "c": "HRT", "f": "Troche", "s": "25 mg - Berry Explosion", "p": "$1.20"}, {"n": "Testosterone SR", "c": "HRT", "f": "Troche", "s": "50 mg - Berry Explosion", "p": "$1.20"}, {"n": "Testosterone SR", "c": "HRT", "f": "Troche", "s": "75 mg - Berry Explosion", "p": "$1.20"}, {"n": "Thyroxine (T4) SR", "c": "HRT", "f": "Capsule", "s": "50 mcg", "p": "$1.00"}, {"n": "Triiodothyronine / Thyroxine (T3/T4)", "c": "HRT", "f": "Capsule", "s": "12 mcg / 50 mcg", "p": "$1.20"}, {"n": "Triiodothyronine / Thyroxine (T3/T4)", "c": "HRT", "f": "Capsule", "s": "25 mcg / 150 mcg", "p": "$1.20"}, {"n": "Triiodothyronine / Thyroxine (T3/T4)", "c": "HRT", "f": "Capsule", "s": "18 mcg / 76 mcg", "p": "$1.20"}, {"n": "Triiodothyronine / Thyroxine (T3/T4)", "c": "HRT", "f": "Capsule", "s": "4.5 mcg / 19 mcg", "p": "$1.20"}, {"n": "Triiodothyronine / Thyroxine (T3/T4)", "c": "HRT", "f": "Capsule", "s": "9 mcg / 38 mcg", "p": "$1.20"}, {"n": "Triiodothyronine / Thyroxine (T3/T4)", "c": "HRT", "f": "Capsule", "s": "12 mcg / 38 mcg", "p": "$1.20"}, {"n": "Triiodothyronine / Thyroxine (T3/T4)", "c": "HRT", "f": "Capsule", "s": "27 mcg / 114 mcg", "p": "$1.20"}, {"n": "Ondansetron - Commercial", "c": "MWL - Nausea", "f": "Tablet", "s": "8 mg", "p": "$0.60"}, {"n": "Ondansetron - Commercial", "c": "MWL - Nausea", "f": "Tablet", "s": "4 mg", "p": "$0.60"}, {"n": "BPC-157", "c": "Peptide", "f": "Injectable", "s": "3 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "BPC-157 / GHK-Cu / KPV / TB-500", "c": "Peptide", "f": "Injectable", "s": "3 mg / 10 mg / 3 mg / 3 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "BPC-157 / KPV / TB-500", "c": "Peptide", "f": "Injectable", "s": "3 mg / 3 mg / 3 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "BPC-157 / TB-500", "c": "Peptide", "f": "Injectable", "s": "3 mg / 3 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "BPC-157 / TB-500", "c": "Peptide", "f": "Injectable", "s": "3mg / 3 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "BPC-157 / TB-500 / GHK-Cu", "c": "Peptide", "f": "Injectable", "s": "3 mg / 3 mg / 10 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "BPC-157 ACETATE", "c": "Peptide", "f": "Capsule", "s": "500mcg", "p": "$2.00"}, {"n": "CJC-1295 / Ipamorelin", "c": "Peptide", "f": "Injectable", "s": "1.2 mg / 2 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "DSIP", "c": "Peptide", "f": "Injectable", "s": "1 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "DSIP / BPC-157 / CJC-1295", "c": "Peptide", "f": "Injectable", "s": "1 mg / 2 mg / 2 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "Epithalon", "c": "Peptide", "f": "Injectable", "s": "2 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "IGF-LR3", "c": "Peptide", "f": "Injectable", "s": "200 mcg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "Kisspeptin", "c": "Peptide", "f": "Injectable", "s": "1 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "LIPO-C", "c": "Peptide", "f": "Injectable", "s": "15 mg / 50 mg / 50 mg/mL; 10 mL Vial", "p": "$50.00"}, {"n": "LL-37", "c": "Peptide", "f": "Injectable", "s": "2 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "Melanotan II", "c": "Peptide", "f": "Injectable", "s": "2 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "MOTS-c", "c": "Peptide", "f": "Injectable", "s": "2 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "MOTS-c / Tesamorelin", "c": "Peptide", "f": "Injectable", "s": "2 mg / 3 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "Pentadeca Arginate", "c": "Peptide", "f": "Injectable", "s": "3 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "Pinealon / PE22-28 / Selank", "c": "Peptide", "f": "Injectable", "s": "2 mg / 2 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "PT-141", "c": "Peptide", "f": "Injectable", "s": "10 mg/mL; 1 mL Vial", "p": "$120.00"}, {"n": "PT-141", "c": "Peptide", "f": "Injectable", "s": "2 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "Semax / Selank", "c": "Peptide", "f": "Injectable", "s": "1 mg / 1 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "SS-31", "c": "Peptide", "f": "Injectable", "s": "4 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "SS-31", "c": "Peptide", "f": "Injectable", "s": "2 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "TB-500", "c": "Peptide", "f": "Injectable", "s": "3 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "Tesamorelin", "c": "Peptide", "f": "Injectable", "s": "2 mg/mL; 10 mL Vial", "p": "$120.00"}, {"n": "Tesamorelin", "c": "Peptide", "f": "Injectable", "s": "3 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "Tesamorelin", "c": "Peptide", "f": "Injectable", "s": "3 mg/mL; 10 mL Vial", "p": "$150.00"}, {"n": "Tesamorelin / Ipamorelin", "c": "Peptide", "f": "Injectable", "s": "3 mg / 2 mg/mL; 5 mL Vial", "p": "$150.00"}, {"n": "Thymosin A-1", "c": "Peptide", "f": "Injectable", "s": "5 mg/mL; 5 mL Vial", "p": "$120.00"}, {"n": "NAD+ 1000mg/10mL", "c": "Peptide - Injection", "f": "Injectable", "s": "100mg/10ml", "p": "$90.00"}, {"n": "NAD+ 1200mg/6mL", "c": "Peptide - Injection", "f": "Injectable", "s": "200mg/6ml", "p": "$90.00"}, {"n": "NAD+ 500mg/2.5mL", "c": "Peptide - Injection", "f": "Injectable", "s": "200mg/2.5ml", "p": "$68.00"}, {"n": "NAD+ Sublinguals", "c": "Peptide - Injection", "f": "Injectable", "s": "100mg/ampul (30)", "p": "$60.00"}, {"n": "Phenylephrine 2mg/2mL", "c": "Peptide - Injection", "f": "Injectable", "s": "1mg/2ml", "p": "$35.00"}, {"n": "Sermorelin 15mg/6mL", "c": "Peptide - Injection", "f": "Injectable", "s": "2.5mg/6ml", "p": "$90.00"}, {"n": "Sermorelin 8mg/3.2mL", "c": "Peptide - Injection", "f": "Injectable", "s": "2.5mg/3.2ml", "p": "$65.00"}, {"n": "Sermorelin 9mg/3.6mL", "c": "Peptide - Injection", "f": "Injectable", "s": "2.5mg/3.6ml", "p": "$67.00"}, {"n": "Tri-Mix 1", "c": "Peptide - Injection", "f": "Injectable", "s": "20 doses", "p": "$65.00"}, {"n": "Tri-Mix 2", "c": "Peptide - Injection", "f": "Injectable", "s": "20 doses", "p": "$70.00"}, {"n": "Apomorphine / Sildenafil / Tadalafil / Vardenafil - Creme de Menthe", "c": "Sexual Health", "f": "Troche", "s": "2 mg / 40 mg / 5 mg / 25 mg", "p": "$4.00"}, {"n": "Bi-Mix (Phentolamine / Papaverine)", "c": "Sexual Health", "f": "Injectable", "s": "1 mg / 30 mg/mL; 1 mL Vial", "p": "$90.00"}, {"n": "Climax Cream (ARGIN/ERGOLOID/PENTOX/SILD/THEOPH)", "c": "Sexual Health", "f": "Cream", "s": "9/0.075/7.5/1.5/4.5mg/0.21mL; 30mL Tube", "p": "$80.00"}, {"n": "Ecstasy Cream for Her (Oxytocin / Theophylline / Arginine / Sildenafil)", "c": "Sexual Health", "f": "Cream", "s": "50 IU / 3 / 6 / 2%; 10 g Tube - Raspberry", "p": "$100.00"}, {"n": "Female Desire (Apomorphine / Bremelanotide / Oxytocin / L-Theanine)", "c": "Sexual Health", "f": "Troche", "s": "2 mg / 0.3 mg / 20 IU / 50 mg - Berry Explosion", "p": "$2.00"}, {"n": "Gonadorelin", "c": "Sexual Health", "f": "ODT", "s": "1000mcg", "p": "$2.60"}, {"n": "Gonadorelin", "c": "Sexual Health", "f": "Injectable", "s": "1 mg/mL; 5 mL Vial", "p": "$50.00"}, {"n": "Gonadorelin", "c": "Sexual Health", "f": "Injectable", "s": "1 mg/mL; 2 mL Vial", "p": "$50.00"}, {"n": "Oxytocin", "c": "Sexual Health", "f": "RDT", "s": "250IU", "p": "$2.25"}, {"n": "Oxytocin", "c": "Sexual Health", "f": "RDT", "s": "50IU", "p": "$2.00"}, {"n": "Oxytocin", "c": "Sexual Health", "f": "Nasal Spray", "s": "20 Units / 0.1 mL; 15 mL", "p": "$130.00"}, {"n": "Oxytocin", "c": "Sexual Health", "f": "Nasal Spray", "s": "30 Units / 0.1 mL; 10 mL", "p": "$160.00"}, {"n": "Oxytocin SL", "c": "Sexual Health", "f": "Troche", "s": "300 IU - Creme de Menthe", "p": "$2.50"}, {"n": "Phenylephrine", "c": "Sexual Health", "f": "Injectable", "s": "10 mg/mL; 1 mL Vial", "p": "$109.00"}, {"n": "Quad Mix (Alprostadil / Papaverine / Phentolamine / Atropine)", "c": "Sexual Health", "f": "Injectable", "s": "60 mcg / 30 mg / 2 mg / 0.15 mg; 1 mL Vial", "p": "$120.00"}, {"n": "Quad-Mix (Papaverine / Phentolamine / PGE1 / Atropine)", "c": "Sexual Health", "f": "Injectable", "s": "150 mg / 10 mg / 50 mcg / 0.75 mg (30 mg / 2 mg / 10 mcg / 0.15 mg/mL); 5 mL Vial", "p": "$200.00"}, {"n": "Sildenafil", "c": "Sexual Health", "f": "Troche", "s": "110 mg - Creme de Menthe", "p": "$1.40"}, {"n": "Sildenafil", "c": "Sexual Health", "f": "Troche", "s": "100 mg - Creme de Menthe", "p": "$1.40"}, {"n": "Sildenafil - Commercial", "c": "Sexual Health", "f": "Tablet", "s": "20 mg", "p": "$0.70"}, {"n": "Sildenafil - Commercial", "c": "Sexual Health", "f": "Tablet", "s": "50 mg", "p": "$2.00"}, {"n": "Sildenafil - Commercial", "c": "Sexual Health", "f": "Tablet", "s": "100 mg", "p": "$2.75"}, {"n": "Sildenafil / Tadalafil", "c": "Sexual Health", "f": "RDT", "s": "30 mg / 20 mg", "p": "$2.00"}, {"n": "Sildenafil / Tadalafil SL", "c": "Sexual Health", "f": "Troche", "s": "120 mg / 22 mg - Creme de Menthe", "p": "$2.75"}, {"n": "Sildenafil Citrate", "c": "Sexual Health", "f": "Capsule", "s": "110 MG", "p": "$1.40"}, {"n": "Sildenafil Citrate", "c": "Sexual Health", "f": "Capsule", "s": "55 MG", "p": "$1.40"}, {"n": "Sildenafil Citrate", "c": "Sexual Health", "f": "RDT", "s": "100 mg - Raspberry", "p": "$1.40"}, {"n": "Sildenafil Citrate", "c": "Sexual Health", "f": "RDT", "s": "30 mg", "p": "$2.00"}, {"n": "Sildenafil Citrate", "c": "Sexual Health", "f": "RDT", "s": "56 mg", "p": "$2.00"}, {"n": "Sildenafil Citrate - Commercial", "c": "Sexual Health", "f": "Tablet", "s": "20 mg", "p": "$1.40"}, {"n": "Sildenafil Citrate - Commercial", "c": "Sexual Health", "f": "Tablet", "s": "50 mg", "p": "$1.40"}, {"n": "Sildenafil Citrate SL", "c": "Sexual Health", "f": "Troche", "s": "125 mg - Creme de Menthe", "p": "$2.00"}, {"n": "Tadalafil", "c": "Sexual Health", "f": "Capsule", "s": "25mg", "p": "$1.75"}, {"n": "Tadalafil", "c": "Sexual Health", "f": "Capsule", "s": "5.5mg", "p": "$1.75"}, {"n": "Tadalafil", "c": "Sexual Health", "f": "RDT", "s": "6.5 mg", "p": "$2.00"}, {"n": "Tadalafil", "c": "Sexual Health", "f": "RDT", "s": "11.5 mg", "p": "$2.00"}, {"n": "Tadalafil", "c": "Sexual Health", "f": "RDT", "s": "20.5 mg", "p": "$2.00"}, {"n": "Tadalafil", "c": "Sexual Health", "f": "RDT", "s": "22.5 mg", "p": "$2.00"}, {"n": "Tadalafil - Commercial", "c": "Sexual Health", "f": "Tablet", "s": "20 mg", "p": "$0.90 \u2013 $2.00"}, {"n": "Tadalafil - Commercial", "c": "Sexual Health", "f": "Tablet", "s": "5 mg", "p": "$2.00"}, {"n": "Tadalafil - Commercial", "c": "Sexual Health", "f": "Tablet", "s": "2.5 mg", "p": "$2.00"}, {"n": "Tadalafil - Commercial", "c": "Sexual Health", "f": "Tablet", "s": "10 mg", "p": "$2.00"}, {"n": "Tadalafil / Apomorphine", "c": "Sexual Health", "f": "Troche", "s": "80 mg / 6 mg - Strawberry", "p": "$3.00"}, {"n": "Tadalafil / Apomorphine", "c": "Sexual Health", "f": "Troche", "s": "40 mg / 6 mg - Strawberry", "p": "$2.50"}, {"n": "Tadalafil / Apomorphine", "c": "Sexual Health", "f": "Capsule", "s": "11 mg / 6 mg", "p": "$2.50"}, {"n": "Tadalafil / Sildenafil / Apomorphine", "c": "Sexual Health", "f": "Troche", "s": "40 mg / 150 mg / 6 mg - Strawberry", "p": "$3.00"}, {"n": "Tadalafil / Sildenafil / Apomorphine", "c": "Sexual Health", "f": "Troche", "s": "25 mg / 110 mg / 6 mg - Strawberry", "p": "$3.00"}, {"n": "Tadalafil / Vardenafil / Apomorphine", "c": "Sexual Health", "f": "Troche", "s": "40 mg / 75 mg / 6 mg - Strawberry", "p": "$4.00"}, {"n": "Tadalafil / Vardenafil / Apomorphine", "c": "Sexual Health", "f": "Troche", "s": "25 mg / 40 mg / 6 mg - Strawberry", "p": "$2.50"}, {"n": "Tadalafil SL", "c": "Sexual Health", "f": "Troche", "s": "20 mg - Berry Explosion", "p": "$2.00"}, {"n": "Tri-Mix (Alprostadil / Papaverine / Phentolamine)", "c": "Sexual Health", "f": "Injectable", "s": "20 mcg / 30 mg / 1 mg/mL; 1 mL Vial", "p": "$100.00"}, {"n": "Tri-Mix (Alprostadil / Papaverine / Phentolamine)", "c": "Sexual Health", "f": "Injectable", "s": "30 mcg / 30 mg / 2 mg/mL; 1 mL Vial", "p": "$100.00"}, {"n": "Tri-Mix (Alprostadil / Papaverine / Phentolamine)", "c": "Sexual Health", "f": "Injectable", "s": "40 mcg / 30 mg / 2 mg/mL; 1 mL Vial", "p": "$100.00"}, {"n": "Tri-Mix (Alprostadil / Papaverine / Phentolamine)", "c": "Sexual Health", "f": "Injectable", "s": "10 mcg / 30 mg / 0.5 mg/mL; 1 mL Vial", "p": "$100.00"}, {"n": "Tri-Mix (Papaverine / Phentolamine / PGE1)", "c": "Sexual Health", "f": "Injectable", "s": "90 mg / 6 mg / 60 mcg (30 mg / 2 mg / 20 mcg/mL); 3 mL Vial", "p": "$160.00"}, {"n": "Tri-Mix (Papaverine / Phentolamine / PGE1)", "c": "Sexual Health", "f": "Injectable", "s": "150 mg / 2.5 mg / 100 mcg (30 mg / 0.5 mg / 20 mcg/mL); 5 mL Vial", "p": "$200.00"}, {"n": "Tri-Mix (Papaverine / Phentolamine / PGE1)", "c": "Sexual Health", "f": "Injectable", "s": "150 mg / 10 mg / 100 mcg (30 mg / 2 mg / 20 mcg/mL;  5 mL Vial", "p": "$200.00"}, {"n": "Tri-Mix (Papaverine / Phentolamine / PGE1)", "c": "Sexual Health", "f": "Injectable", "s": "150 mg / 5 mg / 100 mcg (30 mg / 1 mg / 20 mcg/mL); 5 mL Vial", "p": "$200.00"}, {"n": "Tri-Mix (Papaverine / Phentolamine / PGE1)", "c": "Sexual Health", "f": "Injectable", "s": "30 mg / 1 mg / 20 mcg (30 mg / 1 mg / 20 mcg/mL); 1 mL Vial", "p": "$115.00"}, {"n": "Tri-Mix (Papaverine / Phentolamine / PGE1)", "c": "Sexual Health", "f": "Injectable", "s": "30 mg / 2 mg / 20 mcg (30 mg / 2 mg / 20 mcg/mL); 1 mL Vial", "p": "$115.00"}, {"n": "Tri-Mix (Papaverine / Phentolamine / PGE1)", "c": "Sexual Health", "f": "Injectable", "s": "60 mg / 2 mg / 40 mcg (30 mg / 1 mg / 20 mcg/mL); 2 mL Vial", "p": "$140.00"}, {"n": "Tri-Mix (Papaverine / Phentolamine / PGE1)", "c": "Sexual Health", "f": "Injectable", "s": "90 mg / 3 mg / 60 mcg (30 mg / 1 mg / 20 mcg/mL); 3 mL Vial", "p": "$160.00"}, {"n": "Vardenafil", "c": "Sexual Health", "f": "Capsule", "s": "20mg", "p": "$1.40"}, {"n": "Vardenafil / Apomorphine", "c": "Sexual Health", "f": "Capsule", "s": "25 mg / 6 mg", "p": "$2.00"}, {"n": "Vardenafil / Apomorphine", "c": "Sexual Health", "f": "Troche", "s": "40 mg / 6 mg - Strawberry", "p": "$3.50"}, {"n": "Vardenafil / Apomorphine", "c": "Sexual Health", "f": "Troche", "s": "80 mg / 6 mg - Strawberry", "p": "$4.00"}, {"n": "Vardenafil / Apomorphine", "c": "Sexual Health", "f": "Troche", "s": "17.5 mg / 3 mg - Bubble Gum", "p": "$2.00"}, {"n": "Hyaluronic Acid / Vitamin A / Vitamin E", "c": "Sexual Wellness", "f": "Cream", "s": "5 / 1 / 1%; 30 mL; 60 mL Pump", "p": "$120.00"}, {"n": "Hyaluronic Acid / Vitamin A / Vitamin E", "c": "Sexual Wellness", "f": "Cream", "s": "5 / 1 / 1%; 30 mL; 30 mL Pump", "p": "$60.00"}, {"n": "IM Pack - 10 Pack Kit", "c": "Supplies", "f": "Device", "s": "1 mL LL Syringe, 25G Needle, Spike, Alcohol Pad", "p": "$10.00"}, {"n": "IM Pack - 5 Pack Kit", "c": "Supplies", "f": "Device", "s": "1 mL LL Syringe, 25G Needle, Spike, Alcohol Pad", "p": "$5.00"}, {"n": "IM Pack - 8 Pack Kit", "c": "Supplies", "f": "Device", "s": "1 mL LL Syringe, 25G Needle, Spike, Alcohol Pad", "p": "$8.00"}, {"n": "Luer Lock", "c": "Supplies", "f": "Syringe", "s": "1 mL", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "18G x 1 in Draw Tip, No Syringe", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "21G x 1 in Draw Tip, No Syringe", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "23G x 1 in Draw Tip, No Syringe", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "25G x 1 in Draw Tip, No Syringe", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "25G x 5/8 in Draw Tip, No Syringe", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "27G x 1/2 in Draw Tip, No Syringe", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "27G x 0.5 in Needle", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "18G x 1 in Needle", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "27G x 1/2 in Needle Tip", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "25G x 1 in Needle Tip", "p": "$0.37"}, {"n": "Needle Tips", "c": "Supplies", "f": "Syringe", "s": "18G x 1-1/2 in Needle Tip", "p": "$0.37"}, {"n": "Syringe w/ Attached Needle", "c": "Supplies", "f": "Syringe", "s": "25G x 1 in Needle, 3 mL Syringe", "p": "$0.37"}, {"n": "Syringe w/ Attached Needle", "c": "Supplies", "f": "Syringe", "s": "23G x 1 in Needle, 3 mL Syringe", "p": "$0.37"}, {"n": "Syringe w/ Attached Needle", "c": "Supplies", "f": "Syringe", "s": "31G x  5/16 in Needle, 1 mL Syringe", "p": "$0.37"}, {"n": "Syringe w/ Attached Needle", "c": "Supplies", "f": "Syringe", "s": "31G x  5/16 in Needle, 0.5 mL Syringe", "p": "$0.37"}, {"n": "Syringe w/ Attached Needle", "c": "Supplies", "f": "Syringe", "s": "27G x 1/2 in Needle, 1 mL Syringe", "p": "$0.37"}, {"n": "Syringe w/ Attached Needle", "c": "Supplies", "f": "Syringe", "s": "25G x 5/8 in Needle, 3 mL Syringe", "p": "$0.37"}, {"n": "Syringe w/ Attached Needle", "c": "Supplies", "f": "Syringe", "s": "30G x 5/16 in Needle, 1 mL Syringe", "p": "$0.37"}, {"n": "Syringe w/ Attached Needle", "c": "Supplies", "f": "Syringe", "s": "27G x 0.5 in Needle, 1 mL Syringe", "p": "$0.37"}, {"n": "Syringe w/ Attached Needle", "c": "Supplies", "f": "Syringe", "s": "31G x 5/16 in Needle, 1 mL Syringe", "p": "$0.37"}, {"n": "Syringe w/ Attached Needle", "c": "Supplies", "f": "Syringe", "s": "31G x 5/16 in Needle, 0.5 mL Syringe", "p": "$0.37"}, {"n": "Topi-Click Perl", "c": "Supplies", "f": "Syringe", "s": "Topi-Click Perl Device", "p": "$4.00"}, {"n": "Bacteriostatic Water", "c": "Weight Loss", "f": "Solution", "s": "30mL", "p": "$10.00"}, {"n": "Metformin - Commercial", "c": "Weight Loss", "f": "Tablet", "s": "1,000 mg", "p": "$1.75"}, {"n": "Metformin - Commercial", "c": "Weight Loss", "f": "Tablet", "s": "500 mg", "p": "$0.80"}, {"n": "MIC", "c": "Weight Loss", "f": "Injectable", "s": "25/50/50/10ml", "p": "$23.00"}, {"n": "Phentermine - Commercial", "c": "Weight Loss", "f": "Tablet", "s": "37.5 mg", "p": "$0.90"}, {"n": "Phentermine/Topiramate", "c": "Weight Loss", "f": "Capsule", "s": "30mg/12.5mg", "p": "$1.30"}, {"n": "Phentermine/Topiramate", "c": "Weight Loss", "f": "Capsule", "s": "15mg/12.5mg", "p": "$1.30"}, {"n": "Semaglutide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "8mg", "p": "$200.00"}, {"n": "Semaglutide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "4mg", "p": "$140.00"}, {"n": "Semaglutide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "6mg", "p": "$170.00"}, {"n": "Semaglutide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "2mg", "p": "$98.00"}, {"n": "Semaglutide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "12mg", "p": "$260.00"}, {"n": "Semaglutide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "10mg", "p": "$230.00"}, {"n": "Semaglutide (30 Ampules)", "c": "Weight Loss", "f": "Ampule", "s": "3 mg/mL", "p": "$100.00"}, {"n": "Semaglutide (30 Ampules)", "c": "Weight Loss", "f": "Ampule", "s": "2 mg/mL", "p": "$90.00"}, {"n": "Semaglutide (30 Ampules)", "c": "Weight Loss", "f": "Ampule", "s": "4 mg/mL", "p": "$110.00"}, {"n": "Semaglutide / B12", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (10 mg / 0.5 mg/mL); 1 mL Vial", "p": "$105.00"}, {"n": "Semaglutide / B12", "c": "Weight Loss", "f": "Injectable", "s": "6 mg (6 mg / 0.5 mg/mL); 1 mL Vial", "p": "$60.00"}, {"n": "Semaglutide / B12", "c": "Weight Loss", "f": "Injectable", "s": "2 mg (2 mg / 0.5 mg/mL); 1 mL Vial", "p": "$55.00"}, {"n": "Semaglutide / B12", "c": "Weight Loss", "f": "Injectable", "s": "4 mg (4 mg / 0.5 mg/mL); 1 mL Vial", "p": "$60.00"}, {"n": "Semaglutide / B12", "c": "Weight Loss", "f": "Injectable", "s": "1 mg (1 mg / 0.5 mg/mL); 1 mL Vial", "p": "$40.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "7.5 mg (2.5 mg / 2.5 mg/mL); 3 mL Vial", "p": "$90.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "5 mg (2.5 mg / 2.5 mg/mL); 2 mL Vial", "p": "$70.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "2.5 mg (2.5 mg / 2.5 mg/mL); 1 mL Vial", "p": "$55.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "1 mg (1 mg / 1 mg/mL); 1 mL Vial", "p": "$40.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "15 mg (5 mg / 5 mg/mL); 3 mL Vial", "p": "$135.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (2.5 mg / 2.5 mg/mL); 4 mL Vial", "p": "$105.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "8 mg (4 mg / 5 mg/mL); 2 mL Vial", "p": "$90.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "4 mg (4 mg / 5 mg/mL); 1 mL Vial", "p": "$60.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "2 mg (4 mg / 5 mg/mL); 0.5 mL Vial", "p": "$50.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "16 mg (4 mg / 5 mg/mL); 4 mL Vial", "p": "$140.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "4 mg (4 mg / 0.5 mg/mL); 1 mL Vial", "p": "$60.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "6 mg (6 mg / 0.5 mg/mL); 1 mL Vial", "p": "$60.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (10 mg / 0.5 mg/mL); 1 mL Vial", "p": "$105.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "1 mg (1 mg / 0.5 mg/mL); 1 mL Vial", "p": "$40.00"}, {"n": "Semaglutide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "2 mg (2 mg / 0.5 mg/mL); 1 mL Vial", "p": "$55.00"}, {"n": "Semaglutide / Glycine / B12", "c": "Weight Loss", "f": "Injectable", "s": "15 mg (5 mg / 5 mg / 1 mg/mL); 3 mL Vial", "p": "$135.00"}, {"n": "Semaglutide / Glycine / B12", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (5 mg / 5 mg / 1 mg/mL); 2 mL Vial", "p": "$70.00"}, {"n": "Semaglutide / L-Carnitine", "c": "Weight Loss", "f": "Injectable", "s": "10 mg / 200 mg (5 / 100 mg/mL); 2 mL Vial", "p": "$140.00"}, {"n": "Semaglutide / L-Carnitine", "c": "Weight Loss", "f": "Injectable", "s": "3 mg / 300 mg (1 / 100 mg/mL); 3 mL Vial", "p": "$85.00"}, {"n": "Semaglutide / L-Carnitine", "c": "Weight Loss", "f": "Injectable", "s": "8 mg / 400 mg (2 / 100 mg/mL); 4 mL Vial", "p": "$120.00"}, {"n": "Semaglutide / L-Carnitine", "c": "Weight Loss", "f": "Injectable", "s": "4 mg / 200 mg (2 / 100 mg/mL); 2 mL Vial", "p": "$90.00"}, {"n": "Semaglutide / Methylcobalamin", "c": "Weight Loss", "f": "Injectable", "s": "7.5 mg (2.5 mg / 2 mg/mL); 3 mL Vial", "p": "$85.00"}, {"n": "Semaglutide / Methylcobalamin", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (2.5 mg / 2 mg/mL); 4 mL Vial", "p": "$105.00"}, {"n": "Semaglutide / Methylcobalamin", "c": "Weight Loss", "f": "Injectable", "s": "2.5 mg (2.5 mg / 2 mg/mL); 1 mL Vial", "p": "$60.00"}, {"n": "Semaglutide / Methylcobalamin", "c": "Weight Loss", "f": "Injectable", "s": "5 mg (2.5 mg / 2 mg/mL); 2 mL Vial", "p": "$70.00"}, {"n": "Semaglutide / Methylcobalamin / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "5 mg (5 mg / 1 mg / 10 mg/mL); 1 mL Vial", "p": "$90.00"}, {"n": "Semaglutide / Methylcobalamin / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "12.5 mg (5 mg / 1 mg / 10 mg/mL); 2.5 mL Vial", "p": "$155.00"}, {"n": "Semaglutide / Methylcobalamin / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (5 mg / 1 mg / 10 mg/mL); 2 mL Vial", "p": "$140.00"}, {"n": "Semaglutide / Methylcobalamin / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "1 mg (1 mg / 1 mg / 10 mg/mL); 1 mL Vial", "p": "$70.00"}, {"n": "Semaglutide / Methylcobalamin / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "2.5 mg (1 mg / 1mg / 10 mg/mL); 2.5 mL Vial", "p": "$80.00"}, {"n": "Semaglutide / Methylcobalamin / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "7.5 mg (5 mg / 1 mg / 10 mg/mL); 1.5 mL Vial", "p": "$120.00"}, {"n": "Tirzepatide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "12mg", "p": "$225.00"}, {"n": "Tirzepatide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "10mg", "p": "$205.00"}, {"n": "Tirzepatide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "3mg", "p": "$145.00"}, {"n": "Tirzepatide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "8mg", "p": "$195.00"}, {"n": "Tirzepatide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "7mg", "p": "$185.00"}, {"n": "Tirzepatide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "6mg", "p": "$175.00"}, {"n": "Tirzepatide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "5mg", "p": "$165.00"}, {"n": "Tirzepatide - 30 Day", "c": "Weight Loss", "f": "ODT", "s": "4mg", "p": "$155.00"}, {"n": "Tirzepatide (30 Ampules)", "c": "Weight Loss", "f": "Ampule", "s": "12 mg/mL", "p": "$225.00"}, {"n": "Tirzepatide (30 Ampules)", "c": "Weight Loss", "f": "Ampule", "s": "9 mg/mL", "p": "$200.00"}, {"n": "Tirzepatide (30 Ampules)", "c": "Weight Loss", "f": "Ampule", "s": "6 mg/mL", "p": "$150.00"}, {"n": "Tirzepatide (30 Ampules)", "c": "Weight Loss", "f": "Ampule", "s": "4 mg/mL", "p": "$125.00"}, {"n": "Tirzepatide (30 Ampules)", "c": "Weight Loss", "f": "Ampule", "s": "15 mg/mL", "p": "$275.00"}, {"n": "Tirzepatide / B12", "c": "Weight Loss", "f": "Injectable", "s": "60 mg (30 mg / 0.5 mg/mL); 2 mL Vial", "p": "$185.00"}, {"n": "Tirzepatide / B12", "c": "Weight Loss", "f": "Injectable", "s": "40 mg (20 mg / 0.5 mg/mL); 2 mL Vial", "p": "$150.00"}, {"n": "Tirzepatide / B12", "c": "Weight Loss", "f": "Injectable", "s": "50 mg (25 mg / 0.5 mg/mL); 2 mL Vial", "p": "$170.00"}, {"n": "Tirzepatide / B12", "c": "Weight Loss", "f": "Injectable", "s": "20 mg (10 mg / 0.5 mg/mL); 2 mL Vial", "p": "$100.00"}, {"n": "Tirzepatide / B12", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (5 mg / 0.5 mg/mL); 2 mL Vial", "p": "$75.00"}, {"n": "Tirzepatide / B12", "c": "Weight Loss", "f": "Injectable", "s": "30 mg (15 mg / 0.5 mg/mL); 2 mL Vial", "p": "$135.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "60 mg (20 mg / 5 mg/mL); 3 mL Vial", "p": "$185.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "40 mg (20 mg / 5 mg/mL); 2 mL Vial", "p": "$150.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "30 mg (10 mg / 5 mg/mL); 3 mL Vial", "p": "$135.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "20 mg (20 mg / 5 mg/mL); 1 mL Vial", "p": "$100.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (10 mg / 5 mg/mL); 1 mL Vial", "p": "$75.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "50 mg (25 mg / 0.5 mg/mL); 2 mL Vial", "p": "$170.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "60 mg (30 mg / 0.5 mg/mL); 2 mL Vial", "p": "$185.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (5 mg / 0.5 mg/mL); 2 mL Vial", "p": "$75.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "20 mg (10 mg / 0.5 mg/mL); 2 mL Vial", "p": "$100.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "30 mg (15 mg / 0.5 mg/mL); 2 mL Vial", "p": "$135.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "40 mg (20 mg / 0.5 mg/mL); 2 mL Vial", "p": "$150.00"}, {"n": "Tirzepatide / Glycine", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (20 mg / 5 mg/mL); 0.5 mL Vial", "p": "$75.00"}, {"n": "Tirzepatide / Glycine / B12", "c": "Weight Loss", "f": "Injectable", "s": "60 mg (10 mg / 5 mg / 500 mcg/mL); 6 mL Vial", "p": "$185.00"}, {"n": "Tirzepatide / Glycine / Methylcobalamin", "c": "Weight Loss", "f": "Injectable", "s": "51 mg (17 / 10 / 1 mg/mL); 3 mL Vial", "p": "$170.00"}, {"n": "Tirzepatide / Glycine / Methylcobalamin", "c": "Weight Loss", "f": "Injectable", "s": "8.5 mg (8.5 / 10 / 1 mg/mL); 1 mL Vial", "p": "$70.00"}, {"n": "Tirzepatide / Glycine / Methylcobalamin", "c": "Weight Loss", "f": "Injectable", "s": "68 mg (17 / 10 / 1 mg/mL); 4 mL Vial", "p": "$190.00"}, {"n": "Tirzepatide / Glycine / Methylcobalamin", "c": "Weight Loss", "f": "Injectable", "s": "17 mg (8.5 / 10 / 1 mg/mL); 2 mL Vial", "p": "$100.00"}, {"n": "Tirzepatide / Glycine / Methylcobalamin", "c": "Weight Loss", "f": "Injectable", "s": "34 mg (17 / 10 / 1 mg/mL); 2 mL Vial", "p": "$137.00"}, {"n": "Tirzepatide / L-Carnitine", "c": "Weight Loss", "f": "Injectable", "s": "30 mg (10 mg / 100 mg/mL); 3 mL Vial", "p": "$140.00"}, {"n": "Tirzepatide / L-Carnitine", "c": "Weight Loss", "f": "Injectable", "s": "60 mg (20 mg / 100 mg/mL); 3 mL Vial", "p": "$185.00"}, {"n": "Tirzepatide / L-Carnitine", "c": "Weight Loss", "f": "Injectable", "s": "10 mg (10 mg / 100 mg/mL); 1 mL Vial", "p": "$120.00"}, {"n": "Tirzepatide / L-Carnitine", "c": "Weight Loss", "f": "Injectable", "s": "60 mg (30 mg / 25 mg/mL); 2 mL Vial", "p": "$185.00"}, {"n": "COQ-10", "c": "Wellness", "f": "Capsule", "s": "100mg", "p": "$2.00"}, {"n": "Cyanocobalamin (B12) - Commercial", "c": "Wellness", "f": "Injectable", "s": "1,000 mcg/mL; 30 mL Vial", "p": "$48.00"}, {"n": "Cyanocobalamin (B12) - Commercial", "c": "Wellness", "f": "Injectable", "s": "1,000 mcg/mL; 10 mL Vial", "p": "$24.00"}, {"n": "Cyanocobalamin 10mg/10mL", "c": "Wellness", "f": "Injectable", "s": "1mg/10ml", "p": "$20.00"}, {"n": "Doxycycline Hycalate", "c": "Wellness", "f": "Capsule", "s": "50mg", "p": "$1.20"}, {"n": "Doxycycline Hycalate - Commercial", "c": "Wellness", "f": "Tablet", "s": "20 mg", "p": "$1.20"}, {"n": "Ezetimibe - Commercial", "c": "Wellness", "f": "Tablet", "s": "10 mg", "p": "$1.00"}, {"n": "Glutathione", "c": "Wellness", "f": "Injectable", "s": "200 mg/mL; 10 mL Vial", "p": "$35.00 \u2013 $40.00"}, {"n": "Glutathione", "c": "Wellness", "f": "Capsule", "s": "100mg", "p": "$1.20"}, {"n": "Glutathione", "c": "Wellness", "f": "Injectable", "s": "200 mg/mL; 30 mL Vial", "p": "$60.00"}, {"n": "Glutathione", "c": "Wellness", "f": "Injectable", "s": "100 mg/mL; 10 mL Vial", "p": "$35.00"}, {"n": "Glutathione 2000mg/10mL", "c": "Wellness", "f": "Injectable", "s": "200mg/10ml", "p": "$25.00"}, {"n": "Glutathione 6000mg/30mL", "c": "Wellness", "f": "Injectable", "s": "200mg/30ml", "p": "$55.00"}, {"n": "Ketamine", "c": "Wellness", "f": "ODT", "s": "100mg", "p": "$2.75"}, {"n": "Ketamine", "c": "Wellness", "f": "ODT", "s": "50mg", "p": "$2.50"}, {"n": "Lipo-B", "c": "Wellness", "f": "Injectable", "s": "50 mg / 50 mg / 25 mg / 1 mg/mL; 10 mL Vial", "p": "$50.00"}, {"n": "Methylcobalamin 10mg/10mL", "c": "Wellness", "f": "Injectable", "s": "1mg/10ml", "p": "$25.00"}, {"n": "Methylene Blue", "c": "Wellness", "f": "Capsule", "s": "25mg", "p": "$2.50"}, {"n": "Methylene Blue", "c": "Wellness", "f": "Capsule", "s": "50mg", "p": "$4.00"}, {"n": "MIC / B12", "c": "Wellness", "f": "Injectable", "s": "25 / 50 / 50 / 1 mg/mL; 10 mL Vial", "p": "$25.00"}, {"n": "MICC / B12", "c": "Wellness", "f": "Injectable", "s": "25 / 50 / 50 mg + 330 mcg B12; 10 mL Vial", "p": "$30.00"}, {"n": "NAD+", "c": "Wellness", "f": "Injectable", "s": "200mg/mL; 5mL Vial", "p": "$90.00"}, {"n": "NAD+", "c": "Wellness", "f": "Injectable", "s": "100 mg/mL; 10 mL Vial", "p": "$90.00"}, {"n": "NAD+", "c": "Wellness", "f": "Injectable", "s": "50 mg/mL; 5 mL Vial", "p": "$60.00"}, {"n": "NAD+", "c": "Wellness", "f": "Injectable", "s": "200 mg/mL; 6 mL Vial", "p": "$90.00"}, {"n": "NAD+", "c": "Wellness", "f": "Injectable", "s": "200 mg/mL; 2.5 mL Vial", "p": "$70.00"}, {"n": "Spironolactone SR", "c": "Wellness", "f": "Capsule", "s": "75mg", "p": "$1.00"}, {"n": "Spironolactone SR", "c": "Wellness", "f": "Capsule", "s": "115mg", "p": "$1.00"}, {"n": "Spironolactone SR", "c": "Wellness", "f": "Capsule", "s": "10mg", "p": "$1.00"}, {"n": "Spironolactone SR", "c": "Wellness", "f": "Capsule", "s": "55mg", "p": "$1.00"}, {"n": "Vitamin D3", "c": "Wellness", "f": "Capsule", "s": "5,000 IU", "p": "$0.50"}, {"n": "Vitamin D3", "c": "Wellness", "f": "Capsule", "s": "10,000 IU", "p": "$0.50"}, {"n": "Vitamin D3/Vitamin K2", "c": "Wellness", "f": "Capsule", "s": "10,000iu/180mcg", "p": "$0.60"}];
+const SLACK_EMAIL = 'in-bound-aaaar5exvtg3oiiyq5m2stuqh4@laofficetalk.slack.com';
+
+// ── FILTER STATE ──────────────────────────────────────────────────────────────
+let activeCats = new Set(), activeForms = new Set(), searchTerm = '', sortCol = 'n', sortDir = 1;
+
+const catToForms = {}, formToCats = {};
+DATA.forEach(d => {
+  if (!catToForms[d.c]) catToForms[d.c] = new Set();
+  catToForms[d.c].add(d.f);
+  if (!formToCats[d.f]) formToCats[d.f] = new Set();
+  formToCats[d.f].add(d.c);
+});
+const CATEGORIES = Object.keys(catToForms).sort();
+const FORMS = Object.keys(formToCats).sort();
+const catPills = {}, formPills = {};
+
+// ── FILTER DRAWER TOGGLE (mobile) ────────────────────────────────────────────
+let drawerOpen = false;
+document.getElementById('filterToggle').addEventListener('click', () => {
+  drawerOpen = !drawerOpen;
+  document.getElementById('filtersDrawer').classList.toggle('open', drawerOpen);
+  document.getElementById('filterChevron').classList.toggle('open', drawerOpen);
+});
+
+function updateActiveCount() {
+  const total = activeCats.size + activeForms.size;
+  const el = document.getElementById('activeCount');
+  el.textContent = total;
+  el.classList.toggle('show', total > 0);
+  // Also update toggle label
+  const lbl = document.querySelector('.filter-toggle-label');
+  lbl.textContent = total > 0 ? `Filters (${total} active)` : '\u25A3 Filter products';
+}
+
+// ── BUILD PILLS ───────────────────────────────────────────────────────────────
+function buildPills() {
+  const catEl = document.getElementById('categoryFilters');
+  CATEGORIES.forEach(val => {
+    const p = document.createElement('span');
+    p.className = 'pill'; p.textContent = val;
+    p.addEventListener('click', () => { toggleSet(activeCats, val); updatePillStates(); updateActiveCount(); render(); });
+    catEl.appendChild(p); catPills[val] = p;
+  });
+  const formEl = document.getElementById('formFilters');
+  FORMS.forEach(val => {
+    const p = document.createElement('span');
+    p.className = 'pill'; p.textContent = val;
+    p.addEventListener('click', () => { toggleSet(activeForms, val); updatePillStates(); updateActiveCount(); render(); });
+    formEl.appendChild(p); formPills[val] = p;
+  });
+}
+
+function toggleSet(set, val) { if (set.has(val)) set.delete(val); else set.add(val); }
+
+function matchSearch(d) {
+  if (!searchTerm) return true;
+  return (d.n + ' ' + d.c + ' ' + d.f + ' ' + d.s).toLowerCase().includes(searchTerm);
+}
+
+function updatePillStates() {
+  CATEGORIES.forEach(cat => {
+    const p = catPills[cat];
+    p.classList.toggle('active', activeCats.has(cat));
+    const ok = DATA.some(d => d.c === cat && (activeForms.size === 0 || activeForms.has(d.f)) && matchSearch(d));
+    p.classList.toggle('dimmed', !ok && !activeCats.has(cat));
+  });
+  FORMS.forEach(form => {
+    const p = formPills[form];
+    p.classList.toggle('active', activeForms.has(form));
+    const ok = DATA.some(d => d.f === form && (activeCats.size === 0 || activeCats.has(d.c)) && matchSearch(d));
+    p.classList.toggle('dimmed', !ok && !activeForms.has(form));
+  });
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchTerm = e.target.value.toLowerCase().trim();
+  updatePillStates(); render();
+});
+
+// ── CLEAR ─────────────────────────────────────────────────────────────────────
+document.getElementById('clearBtn').addEventListener('click', () => {
+  activeCats.clear(); activeForms.clear();
+  searchTerm = ''; document.getElementById('searchInput').value = '';
+  updatePillStates(); updateActiveCount(); render();
+  // Close drawer on mobile after clearing
+  drawerOpen = false;
+  document.getElementById('filtersDrawer').classList.remove('open');
+  document.getElementById('filterChevron').classList.remove('open');
+});
+
+// ── SORT ──────────────────────────────────────────────────────────────────────
+document.querySelectorAll('thead th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.col;
+    if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = 1; }
+    document.querySelectorAll('thead th').forEach(h => h.classList.remove('sa-asc','sa-desc'));
+    th.classList.add(sortDir === 1 ? 'sa-asc' : 'sa-desc');
+    render();
+  });
+});
+
+function parsePrice(p) { const m = (p||'').match(/[\d.]+/); return m ? parseFloat(m[0]) : 0; }
+
+function getFiltered() {
+  return DATA.filter(d =>
+    (activeCats.size === 0 || activeCats.has(d.c)) &&
+    (activeForms.size === 0 || activeForms.has(d.f)) &&
+    matchSearch(d)
+  ).sort((a, b) => {
+    const va = a[sortCol]||'', vb = b[sortCol]||'';
+    if (sortCol === 'p') return (parsePrice(va) - parsePrice(vb)) * sortDir;
+    return va.localeCompare(vb) * sortDir;
+  });
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function highlight(text, term) {
+  if (!term) return esc(text);
+  const idx = text.toLowerCase().indexOf(term);
+  if (idx === -1) return esc(text);
+  return esc(text.slice(0,idx))+'<mark>'+esc(text.slice(idx,idx+term.length))+'</mark>'+esc(text.slice(idx+term.length));
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render() {
+  const filtered = getFiltered();
+  const count = filtered.length;
+  const t = searchTerm;
+
+  document.getElementById('countDisplay').textContent = count.toLocaleString() + ' products';
+
+  const empty = document.getElementById('emptyState');
+  if (!count) {
+    document.getElementById('cardList').innerHTML = '';
+    document.getElementById('tableBody').innerHTML = '';
+    empty.style.display = '';
+    document.getElementById('resultFooter').textContent = '';
+    document.getElementById('tableFooter').textContent = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const footerText = `${count.toLocaleString()} of ${DATA.length.toLocaleString()} products \u00b7 BoomRx Formulary \u00b7 50-state shipping`;
+  document.getElementById('resultFooter').textContent = footerText;
+  document.getElementById('tableFooter').textContent = 'BoomRx Master Formulary \u00b7 Updated September 6, 2026 \u00b7 50-state shipping \u00b7 All network pharmacies';
+
+  // Cards (mobile)
+  document.getElementById('cardList').innerHTML = filtered.map(d => `
+    <div class="product-card">
+      <div class="card-top">
+        <div class="card-name">${highlight(d.n, t)}</div>
+        <div class="card-price">${esc(d.p)}</div>
+      </div>
+      <div class="card-meta">
+        <span class="tag tag-cat">${esc(d.c)}</span>
+        <span class="tag tag-form">${esc(d.f)}</span>
+        <span class="card-strength">${esc(d.s)}</span>
+      </div>
+    </div>`).join('');
+
+  // Table (desktop)
+  document.getElementById('tableBody').innerHTML = filtered.map(d => `<tr>
+    <td class="td-name">${highlight(d.n, t)}</td>
+    <td><span class="tag tag-cat">${esc(d.c)}</span></td>
+    <td><span class="tag tag-form">${esc(d.f)}</span></td>
+    <td class="td-strength">${esc(d.s)}</td>
+    <td class="td-price">${esc(d.p)}</td>
+  </tr>`).join('');
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+const overlay = document.getElementById('modalOverlay');
+document.getElementById('openSignup').addEventListener('click', () => {
+  overlay.classList.add('open'); document.body.style.overflow = 'hidden';
+});
+document.getElementById('closeModal').addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+function closeModal() { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+
+// ── FORM ──────────────────────────────────────────────────────────────────────
+function showError(msg) { const el = document.getElementById('formError'); el.textContent = msg; el.style.display = 'block'; el.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+function clearError() { document.getElementById('formError').style.display = 'none'; }
+function val(id) { return document.getElementById(id).value.trim(); }
+
+document.getElementById('submitBtn').addEventListener('click', async () => {
+  clearError();
+  const fname = val('f-fname'), lname = val('f-lname'), email = val('f-email'),
+        phone = val('f-phone'), company = val('f-company'), website = val('f-website'),
+        type = val('f-type'), volume = val('f-volume'), interest = val('f-interest');
+
+  if (!fname || !lname) return showError('Please enter your first and last name.');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Please enter a valid email address.');
+  if (!phone) return showError('Please enter a phone number.');
+  if (!company) return showError('Please enter your company name.');
+  if (!type) return showError('Please select a company type.');
+  if (!volume) return showError('Please select a patient volume range.');
+  if (!interest) return showError('Please select a primary product interest.');
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Sending\u2026';
+
+  try {
+    const res = await fetch('https://formspree.io/f/myeybodo', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        _subject: `New BoomRx Lead: ${fname} ${lname} \u2014 ${company}`,
+        Name: `${fname} ${lname}`,
+        Email: email,
+        Phone: phone,
+        Company: company,
+        Website: website || '\u2014',
+        'Company Type': type,
+        'Monthly Volume': volume,
+        'Product Interest': interest,
+        _source: 'BoomRx Conference Formulary'
+      })
+    });
+
+    if (!res.ok) throw new Error('Server error');
+
+    document.getElementById('modalBody').style.display = 'none';
+    document.getElementById('modalSuccess').style.display = 'block';
+  } catch (err) {
+    showError('Something went wrong. Please try again or email us at hello@boomrx.com.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Request Portal Access \u2192';
+  }
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildPills();
+updatePillStates();
+render();
+</script>
+</body>
+</html>
